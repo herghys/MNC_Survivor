@@ -1,6 +1,6 @@
 {
-    "name": "HerghysStudio.Survivor",
-    "rootNamespace": "HerghysStudio.Survivor",
+    "name": "HerghysStudio.Survivor.Utility",
+    "rootNamespace": "HerghysStudio.Survivor.Utility",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
