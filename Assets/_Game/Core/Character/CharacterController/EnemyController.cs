@@ -2,11 +2,11 @@ using UnityEngine;
 
 namespace HerghysStudio.Survivor.Character
 {
-    public class Enemy : BaseCharacterController
+    public class EnemyController : BaseCharacterController<EnemyMovement, EnemyCharacterData>
     {
         protected override void Initialize()
         {
-            throw new System.NotImplementedException();
+            base.Initialize();
         }
 
         protected override void OnDie()

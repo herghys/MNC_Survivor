@@ -35,7 +35,6 @@ namespace HerghysStudio.Survivor.WorldGeneration
                 EnvironmentHolder = new GameObject("Chunk_Holder");
                 EnvironmentHolder.transform.SetParent(null);
                 EnvironmentHolder.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
-                EnvironmentHolder.hideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
             }
         }
 

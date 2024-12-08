@@ -1,13 +1,10 @@
-using HerghysStudio.Survivor.Character;
-
 using UnityEngine;
-using UnityEngine.Pool;
 
 namespace HerghysStudio.Survivor
 {
-    public class EnemySpawner : MonoBehaviour
+    public class CharacterAnimatorController : MonoBehaviour
     {
-        private ObjectPool<EnemyController> EnemyPool;
+        // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
         

@@ -1,13 +1,19 @@
+using HerghysStudio.Survivor.WorldGeneration;
+
 using UnityEngine;
 
 namespace HerghysStudio.Survivor.Character
 {
-    public class Player : BaseCharacterController
+    public class PlayerController : BaseCharacterController<PlayerMovement, PlayableCharacterData>
     {
-        
         protected override void Initialize()
         {
-            throw new System.NotImplementedException();
+            base.Initialize();
+        }
+        private void Start()
+        {
+            WorldGenerator.Instance.SetPlayer(this.transform); 
+            CameraController.Instance.SetupPlayer(this.transform);
         }
 
         protected override void OnDie()

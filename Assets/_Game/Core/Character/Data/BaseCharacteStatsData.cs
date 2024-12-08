@@ -6,11 +6,9 @@ using UnityEngine.Rendering;
 
 namespace HerghysStudio.Survivor
 {
-    [CreateAssetMenu(fileName = "BaseCharacterData", menuName = "Data/Character")]
-    public class BaseCharacterData : ScriptableObject
+    [CreateAssetMenu(fileName = "BaseCharacteStatsData", menuName = "Data/Character Stats")]
+    public class BaseCharacteStatsData : ScriptableObject
     {
-        public string CharacterName;
-
         public HealthAttributes Health = new();
         public DamageAttributes Attack = new();
         public DefenseAttributes Defense = new();

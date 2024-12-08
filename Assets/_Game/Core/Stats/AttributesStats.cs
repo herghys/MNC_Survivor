@@ -13,7 +13,22 @@ namespace HerghysStudio.Survivor.Stats
         public virtual AttributeType Id{ get; set; }
 
         [field: SerializeReference]
-        public float Value;
+        private float _value;
+        public float Value
+        {
+            get
+            {
+                if (_value <= 0)
+                    return 0;
+                return _value;
+            }
+            set
+            {
+                _value = value;
+                if (_value <= 0)
+                    _value = 0;
+            }
+        }
 
     }
 

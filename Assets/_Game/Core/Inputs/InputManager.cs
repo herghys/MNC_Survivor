@@ -11,7 +11,7 @@ namespace HerghysStudio.Survivor.Inputs
         /// <summary>
         /// PlayerInput Component References
         /// </summary>
-        private PlayerInput playerInput;
+        private InputSystem_Actions _inputSystemActions;
 
         /// <summary>
         /// ["Move"] Input Action
@@ -40,9 +40,10 @@ namespace HerghysStudio.Survivor.Inputs
             InputActionDisabler();
             UnsubscribeEvents();
         }
-        private void FixedUpdate()
+
+        private void Update()
         {
-            GameLogger.Log($"Input: {MoveInput}");
+            ReadMoveInput();
         }
         #endregion
 
@@ -52,9 +53,9 @@ namespace HerghysStudio.Survivor.Inputs
         /// </summary>
         private void SetupInputs()
         {
-            playerInput = GetComponent<PlayerInput>();
+            _inputSystemActions = new();
 
-            _moveAction = playerInput.actions["Move"];
+            _moveAction = _inputSystemActions.Player.Move;
         }
         #endregion
 
@@ -82,8 +83,7 @@ namespace HerghysStudio.Survivor.Inputs
         /// </summary>
         private void SubscribeEvents()
         {
-            _moveAction.performed += PlayerInput_OnMovePerformed;
-            _moveAction.canceled += PlayerInput_OnMoveCanceled;
+            
 
         }
 
@@ -92,28 +92,14 @@ namespace HerghysStudio.Survivor.Inputs
         /// </summary>
         private void UnsubscribeEvents()
         {
-            _moveAction.performed -= PlayerInput_OnMovePerformed;
-            _moveAction.canceled -= PlayerInput_OnMoveCanceled;
+            
         }
         #endregion
 
         #region Move Input Action Callback
-        /// <summary>
-        /// On Move Performed
-        /// </summary>
-        /// <param Name="callbackContext"></param>
-        public void PlayerInput_OnMovePerformed(InputAction.CallbackContext callbackContext)
+        private void ReadMoveInput()
         {
-            MoveInput = callbackContext.ReadValue<Vector2>();
-        }
-
-        /// <summary>
-        /// On Move Canceled
-        /// </summary>
-        /// <param Name="callbackContext"></param>
-        public void PlayerInput_OnMoveCanceled(InputAction.CallbackContext callbackContext)
-        {
-            MoveInput = Vector2.zero;
+            MoveInput = _moveAction.ReadValue<Vector2>();
         }
         #endregion
     }
