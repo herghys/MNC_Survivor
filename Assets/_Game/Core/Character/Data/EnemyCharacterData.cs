@@ -8,6 +8,9 @@ namespace HerghysStudio.Survivor.Character
 
     public class EnemyCharacterData : CharacterData
     {
+        /// <summary>
+        /// Prefab
+        /// </summary>
         public EnemyController Prefab;
 
     }

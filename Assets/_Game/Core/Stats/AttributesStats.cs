@@ -30,6 +30,21 @@ namespace HerghysStudio.Survivor.Stats
             }
         }
 
+        [field: SerializeField]public float MaxValue { get; set; }
+
+        public void SetValueAsMax()
+        {
+            MaxValue = Value;
+        }
+
+        public void AddMax(float value)
+        {
+            bool updateValue = Value == MaxValue;
+
+            MaxValue += value;
+            if (updateValue)
+                Value = MaxValue;
+        }
     }
 
     [Serializable]

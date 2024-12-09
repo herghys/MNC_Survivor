@@ -92,6 +92,35 @@ namespace HerghysStudio.Survivor
         }
 
         /// <summary>
+        /// Clear Configs
+        /// </summary>
+        /// <param name="id"></param>
+        public void ClearConfig(TId id)
+        {
+            if (_configurations.ContainsKey(id))
+                _configurations[id].Clear();
+        }
+
+        /// <summary>
+        /// Clear Configs
+        /// </summary>
+        /// <param name="objectId"></param>
+        public void ClearConfig(ObjectId<TId> objectId)
+        {
+            if (objectId.Id.Equals(default(TId)))
+            {
+                foreach(var key in _configurations.Keys)
+                {
+                    _configurations[key].Clear();
+                }
+            }
+            else
+            {
+                ClearConfig(objectId.Id);
+            }
+        }
+
+        /// <summary>
         /// Configure
         /// </summary>
         /// <param Name="stats"></param>

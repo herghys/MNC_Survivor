@@ -74,6 +74,7 @@ namespace HerghysStudio.Survivor.WorldGeneration
 
         }
 
+        List<Task> generationTasks = new();
         private async void UpdateWorldChunks()
         {
             isGenerating = true;
@@ -93,16 +94,9 @@ namespace HerghysStudio.Survivor.WorldGeneration
                     if (!activeChunks.ContainsKey(chunkCoord))
                     {
                         newChunks.Add(chunkCoord);
+                        generationTasks.Add(GenerateChunkAsync(chunkCoord));
                     }
                 }
-            }
-
-            // Generate new chunks
-            List<Task> generationTasks = new List<Task>();
-            foreach (var chunkCoord in newChunks)
-            {
-                // Use async method to generate chunks
-                generationTasks.Add(GenerateChunkAsync(chunkCoord));
             }
 
             // Wait for all chunk generation tasks to complete

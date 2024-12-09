@@ -1,3 +1,5 @@
+using System;
+
 using HerghysStudio.Survivor.WorldGeneration;
 
 using UnityEngine;
@@ -6,24 +8,43 @@ namespace HerghysStudio.Survivor.Character
 {
     public class PlayerController : BaseCharacterController<PlayerMovement, PlayableCharacterData>
     {
-        protected override void Initialize()
+        public override void SetupData(PlayableCharacterData characterData)
         {
-            base.Initialize();
-        }
-        private void Start()
-        {
-            WorldGenerator.Instance.SetPlayer(this.transform); 
-            CameraController.Instance.SetupPlayer(this.transform);
+            base.SetupData(characterData);
         }
 
+        public void AddSkill(CharacterSkill skill)
+        {
+            SkillSet.Add(skill);
+        }
         protected override void OnDie()
         {
-            throw new System.NotImplementedException();
+            GameManager.Instance.OnPlayerDead();
         }
 
-        protected override void OnHit()
+        protected override void OnHit(float damage)
+        {
+            base.OnHit(damage);
+
+            if (characterAttribute.HealthAttributes.Value <= 0)
+            {
+                OnDie();
+            }
+        }
+
+        public override void ResetCharacter()
         {
             throw new System.NotImplementedException();
         }
+
+#if UNITY_EDITOR
+        public float damageSample = 5;
+
+        [ContextMenu("Give Damage")]
+        public void GiveDamage()
+        {
+            OnHit(damageSample);
+        }
+#endif
     }
 }

@@ -31,6 +31,12 @@ namespace HerghysStudio.Survivor.Inputs
         public override void DoOnAwake()
         {
             base.DoOnAwake();
+
+            InputSystem.settings.SetInternalFeatureFlag("USE_OPTIMIZED_CONTROLS", true);
+            InputSystem.settings.SetInternalFeatureFlag("USE_READ_VALUE_CACHING", true);
+            InputSystem.settings.SetInternalFeatureFlag("PARANOID_READ_VALUE_CACHING_CHECKS", true);
+            InputSystem.settings.disableRedundantEventsMerging = true;
+
             SetupInputs();
             SubscribeEvents();
             InputActionEnabler();

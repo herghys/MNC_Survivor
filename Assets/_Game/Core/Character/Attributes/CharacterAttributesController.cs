@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 using HerghysStudio.Survivor.Character;
 using HerghysStudio.Survivor.Identifiables;
@@ -19,7 +20,6 @@ namespace HerghysStudio.Survivor
         [field:SerializeField] public DefenseAttributes DefenseAttributes { get; protected set; } = new();
         [field:SerializeField] public SpeedAttributes SpeedAttributes { get; protected set; } = new();
 
-
         public void SetupAttribute<TCharacterData>(ref TCharacterData characterData) where TCharacterData : CharacterData
         {
             CharacterDataInstance = Instantiate(characterData.BaseStatsData);
@@ -33,6 +33,13 @@ namespace HerghysStudio.Survivor
             _configurator.Add(CharacterDataInstance.Speed.Id, speed => speed.Value = CharacterDataInstance.Defense.Value);
 
             ReconfigureAll();
+
+            HealthAttributes.SetValueAsMax();
+            DamageAttributes.SetValueAsMax();
+            DefenseAttributes.SetValueAsMax();
+            SpeedAttributes.SetValueAsMax();
+
+            _configurator.ClearConfig(ObjectId<AttributeType>.Any);
         }
 
         private void OnDisable()
@@ -44,6 +51,20 @@ namespace HerghysStudio.Survivor
         {
             _configurator.Add(attribute, health => health.Value += value);
             Reconfigure(attribute);
+        }
+
+        public void AddMaxModifier(AttributeType attribute, float value)
+        {
+            AttributesStats selectedAttribute = attribute switch
+            {
+                AttributeType.Damage => DamageAttributes,
+                AttributeType.Defense => DefenseAttributes,
+                AttributeType.Speed => SpeedAttributes,
+                AttributeType.Health => HealthAttributes,
+                _ => (HealthAttributes)
+            };
+
+            selectedAttribute.MaxValue += value;
         }
 
         public void ForceChange(AttributeType attribute, float value)
@@ -86,5 +107,14 @@ namespace HerghysStudio.Survivor
                 Reconfigure(attr);
             }
         }
+
+
+#if UNITY_EDITOR
+        [ContextMenu("Add Sample Config")]
+        public void AddSampleHealthMaxConfig()
+        {
+            AddMaxModifier(AttributeType.Health, 20);
+        }
+#endif
     }
 }

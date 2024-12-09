@@ -8,9 +8,15 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Pickups
   - Water
   - UI
+  - Ground
+  - ObstacleProps
+  - WalkthroughProps
+  - Characters
+  - VFX
+  - Lights
   - 
   - 
   - 
@@ -30,13 +36,7 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Camera
   m_SortingLayers:
   - name: Default
     uniqueID: 0

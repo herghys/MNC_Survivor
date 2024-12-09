@@ -19,7 +19,7 @@ namespace HerghysStudio.Survivor.WorldGeneration
         void Awake()
         {
             IsAwaken = false;
-            ChunkPrefabs = Resources.LoadAll<ChunkData>("MapData");
+            ChunkPrefabs = Resources.LoadAll<ChunkData>("ChunkData");
             IsAwaken = true;
         }
 

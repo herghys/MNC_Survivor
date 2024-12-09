@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 using UnityEngine;
 
 namespace HerghysStudio.Survivor.Character
@@ -9,7 +11,7 @@ namespace HerghysStudio.Survivor.Character
         /// <summary>
         /// Character Data
         /// </summary>
-        [SerializeField] protected TCharacterData characterData;
+        [SerializeField] public TCharacterData CharacterData;
 
         /// <summary>
         /// Attribute Controller
@@ -31,24 +33,36 @@ namespace HerghysStudio.Survivor.Character
         /// </summary>
         [SerializeField] protected CharacterHealthController characterHealth;
 
-        private void Awake()
+        public List<CharacterSkill> SkillSet { get; protected set; }
+
+        protected virtual void Awake()
         {
             characterAttribute??=GetComponent<CharacterAttributesController>();
             characterMovement ??= GetComponent<TMovementController>();
             characterAnimator ??= GetComponent<CharacterAnimatorController>();
             characterHealth ??= GetComponent<CharacterHealthController>();
 
-            Initialize();
+            DoOnAwake();
         }
 
-
-        protected virtual void Initialize()
+        protected virtual void DoOnAwake()
         {
-            characterAttribute.SetupAttribute(ref characterData);
+
+        }
+
+        public virtual void SetupData(TCharacterData characterData)
+        {
+            this.CharacterData = characterData;
+            characterAttribute.SetupAttribute(ref CharacterData);
         }
 
         protected abstract void OnDie();
 
-        protected abstract void OnHit();
+        protected virtual void OnHit(float damage)
+        {
+            characterAttribute.HealthAttributes.Value -= damage;
+        }
+
+        public abstract void ResetCharacter();
     }
 }
