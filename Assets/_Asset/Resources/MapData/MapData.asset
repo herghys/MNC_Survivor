@@ -12,3 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9a0f7e7b94e9c34b9894b3ec33d9423, type: 3}
   m_Name: MapData
   m_EditorClassIdentifier: 
+  Enemies:
+  - {fileID: 11400000, guid: 1a9a0f3327dabda42be8cff392ef03a2, type: 2}
+  - {fileID: 11400000, guid: e0c18a33c9c69d148b16efc4420246b2, type: 2}

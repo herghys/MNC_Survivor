@@ -13,13 +13,16 @@ GameObject:
   - component: {fileID: 8363058314501511792}
   - component: {fileID: 5859759695610852575}
   - component: {fileID: 2226780949291772431}
-  - component: {fileID: 8238395616978588787}
-  - component: {fileID: 796583511114690503}
+  - component: {fileID: 4102793093371935852}
+  - component: {fileID: 6626209355821486613}
+  - component: {fileID: 1761784493248822374}
   - component: {fileID: 5379084291054144194}
   - component: {fileID: 4246162896209614765}
   - component: {fileID: 8446672000152693875}
+  - component: {fileID: 452716378244318442}
+  - component: {fileID: 8070680835440440490}
   m_Layer: 9
-  m_Name: Playable_1
+  m_Name: Enemy_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -58,9 +61,9 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_DynamicOccludee: 0
+  m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
-  m_MotionVectors: 0
+  m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
@@ -68,7 +71,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 373350eb5484ba842903077d9c2edc28, type: 2}
+  - {fileID: 2100000, guid: dd9b9f5e6f43f904c8106e4f00e2f8f0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -137,10 +140,32 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 0
   m_IsKinematic: 0
-  m_Interpolate: 1
+  m_Interpolate: 0
   m_Constraints: 84
   m_CollisionDetection: 0
---- !u!114 &8238395616978588787
+--- !u!195 &4102793093371935852
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8339546294431516978}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 1
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 1
+--- !u!114 &6626209355821486613
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -149,16 +174,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 8339546294431516978}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cbba93ab923a2fa469762b85d073efa3, type: 3}
+  m_Script: {fileID: 11500000, guid: 3563c8a65bd137f4794efd6d012c2cf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   CharacterData: {fileID: 0}
   characterAttribute: {fileID: 5379084291054144194}
-  characterMovement: {fileID: 796583511114690503}
+  characterMovement: {fileID: 1761784493248822374}
   characterAnimator: {fileID: 4246162896209614765}
   characterHealth: {fileID: 8446672000152693875}
-  damageSample: 5
---- !u!114 &796583511114690503
+  navMeshAgent: {fileID: 4102793093371935852}
+  target: {fileID: 0}
+  goldDrop: {fileID: 0}
+--- !u!114 &1761784493248822374
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -167,7 +194,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8339546294431516978}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee742dd4ebd885b4494e9b466e4ec07d, type: 3}
+  m_Script: {fileID: 11500000, guid: 638997e3ff6de374ca6418fbd6645a06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   rigidBody: {fileID: 0}
@@ -225,3 +252,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e64da6af8800874bae532a1c7691a2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &452716378244318442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8339546294431516978}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9416694f296fa3546836090e48ad3239, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lodGroup: {fileID: 8070680835440440490}
+  rb: {fileID: 2226780949291772431}
+--- !u!205 &8070680835440440490
+LODGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8339546294431516978}
+  serializedVersion: 2
+  m_LocalReferencePoint: {x: 0, y: 0, z: 0}
+  m_Size: 1
+  m_FadeMode: 2
+  m_AnimateCrossFading: 1
+  m_LastLODIsBillboard: 0
+  m_LODs:
+  - screenRelativeHeight: 0.049047798
+    fadeTransitionWidth: 0
+    renderers: []
+  m_Enabled: 1
