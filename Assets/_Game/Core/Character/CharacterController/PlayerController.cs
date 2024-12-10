@@ -6,10 +6,11 @@ using UnityEngine;
 
 namespace HerghysStudio.Survivor.Character
 {
-    public class PlayerController : BaseCharacterController<PlayerMovement, PlayableCharacterData>
+    public class PlayerController : BaseCharacterController<PlayerMovement, PlayableCharacterData, PlayerAttack>
     {
         public override void SetupData(PlayableCharacterData characterData)
         {
+            IsDead = false;
             base.SetupData(characterData);
         }
 
@@ -19,10 +20,11 @@ namespace HerghysStudio.Survivor.Character
         }
         protected override void OnDie()
         {
-            GameManager.Instance.OnPlayerDead();
+            IsDead = true;
+            GameManager.Instance.PlayerDead();
         }
 
-        protected override void OnHit(float damage)
+        public override void OnHit(float damage)
         {
             base.OnHit(damage);
 

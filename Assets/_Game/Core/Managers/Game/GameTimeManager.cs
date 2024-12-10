@@ -14,12 +14,15 @@ namespace HerghysStudio.Survivor
     {
         public int TotalGameMinutes = 3;
         public float elapsedMillisecond = 0f;
-        public float lastMinuteMilliseondCheckTime = 0f;
-        public long totalMilliSecond { get; private set; }
+        public float lastMinuteMillisecondCheckTime = 0f;
+        public float totalMilliSecond;
 
         public GameManager GameManager;
 
         public UnityEvent OnOneMinutePassed;
+        public UnityEvent OnCountDownDone;
+
+        bool _isPlayerDead;
 
         public override void DoOnAwake()
         {
@@ -27,9 +30,27 @@ namespace HerghysStudio.Survivor
             GameManager??= FindFirstObjectByType<GameManager>();
         }
 
+        private void OnEnable()
+        {
+            GameManager.OnPlayerDead += OnPlayerDead;
+        }
+
+      
+
+        private void OnDisable()
+        {
+            GameManager.OnPlayerDead -= OnPlayerDead;
+
+        }
+
+        private void OnPlayerDead()
+        {
+            _isPlayerDead = true;
+        }
+
         public void StartGameTimer()
         {
-            totalMilliSecond = TimeSpan.FromMinutes(TotalGameMinutes).Milliseconds;
+            totalMilliSecond = (float)TimeSpan.FromMinutes(TotalGameMinutes).TotalMilliseconds;
             elapsedMillisecond = 0;
             StartGameCountdown().Run();
         }
@@ -45,14 +66,22 @@ namespace HerghysStudio.Survivor
 
             GameManager.OnStartCountdownEnded();
 
-            TimerLoop(totalMilliSecond).Run();
         }
 
-        private IEnumerator TimerLoop(long totalMillisecond)
+        public void StartLoop()
         {
-            while (elapsedMillisecond < totalMillisecond)
+            TimerLoop().Run();
+
+        }
+
+        private IEnumerator TimerLoop()
+        {
+            while (elapsedMillisecond < totalMilliSecond)
             {
-                if (GameManager.Instance.IsPaused)
+                if (GameManager.IsPlayerDead)
+                    break;
+
+                if (GameManager.IsPaused)
                 {
                     yield return null;
                     continue;
@@ -60,12 +89,13 @@ namespace HerghysStudio.Survivor
 
                 elapsedMillisecond += Time.deltaTime * 1000f;
 
-                if (elapsedMillisecond - lastMinuteMilliseondCheckTime >= 6000f)
+                if (elapsedMillisecond - lastMinuteMillisecondCheckTime >= 6000f)
                 {
                     OnOneMinutePassed?.Invoke(); // Call this method when a minute has passed
-                    lastMinuteMilliseondCheckTime = elapsedMillisecond; // Update last minute check time
+                    lastMinuteMillisecondCheckTime = elapsedMillisecond; // Update last minute check time
                 }
 
+                GameUIManager.Instance.UpdateTimer(elapsedMillisecond / totalMilliSecond, "Time");
                 yield return null;
             }
 

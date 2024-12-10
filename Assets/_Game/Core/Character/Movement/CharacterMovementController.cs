@@ -13,6 +13,6 @@ namespace HerghysStudio.Survivor.Character
             attributeController = GetComponent<CharacterAttributesController>();
         }
 
-        protected abstract void Move();
+        protected internal abstract void Move();
     }
 }

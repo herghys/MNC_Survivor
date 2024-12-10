@@ -1,3 +1,5 @@
+using HerghysStudio.Survivor.VFX;
+
 using UnityEngine;
 
 namespace HerghysStudio.Survivor
@@ -6,9 +8,10 @@ namespace HerghysStudio.Survivor
 
     public class CharacterSkill : ScriptableObject
     {
-        public SkillEffectType EffecType;
+        public SkillEffectType EffectType;
         public SkillObjectEffect SkillObjectEffect = new();
-        public SkillEffectApplication SkillEffectApplication = new();
+        public AttackVFXData AttackVFXData;
+        public float cooldown;
 
         public GameObject SpawnObjectEffect(Transform position, Transform parent)
         {
@@ -21,11 +24,6 @@ namespace HerghysStudio.Survivor
     {
         public bool ShowEffect;
         public GameObject EffectPrefab;
-    }
-
-    public class SkillEffectApplication
-    {
-        public GameObject EffectApplicationPrefab;
     }
 
     public enum SkillEffectType

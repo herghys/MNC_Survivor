@@ -5,9 +5,10 @@ using UnityEngine;
 namespace HerghysStudio.Survivor.Character
 {
     [RequireComponent(typeof(CharacterAttributesController), typeof(CharacterAnimatorController), typeof(CharacterHealthController))]
-    public abstract class BaseCharacterController<TMovementController, TCharacterData> : MonoBehaviour 
+    public abstract class BaseCharacterController<TMovementController, TCharacterData, TCharacterAttack> : MonoBehaviour 
         where TMovementController : CharacterMovementController
         where TCharacterData : CharacterData
+        where TCharacterAttack : CharacterAttack
     {
         /// <summary>
         /// Character Data
@@ -34,12 +35,20 @@ namespace HerghysStudio.Survivor.Character
         /// </summary>
         [SerializeField] protected CharacterHealthController characterHealth;
 
+        /// <summary>
+        /// CharacterAttack
+        /// </summary>
+        [SerializeField] protected TCharacterAttack characterAttack;
+
+        public bool IsDead { get; protected set; }
         public List<CharacterSkill> SkillSet { get; protected set; }
+
 
         protected virtual void Awake()
         {
             characterAttribute??=GetComponent<CharacterAttributesController>();
             characterMovement ??= GetComponent<TMovementController>();
+            characterAttack ??= GetComponent<TCharacterAttack>();
             characterAnimator ??= GetComponent<CharacterAnimatorController>();
             characterHealth ??= GetComponent<CharacterHealthController>();
 
@@ -70,7 +79,7 @@ namespace HerghysStudio.Survivor.Character
         /// On Character Get Hit
         /// </summary>
         /// <param name="damage"></param>
-        protected virtual void OnHit(float damage)
+        public virtual void OnHit(float damage)
         {
             characterAttribute.HealthAttributes.Value -= damage;
         }

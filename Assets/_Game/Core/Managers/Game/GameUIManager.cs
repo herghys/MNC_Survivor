@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -16,6 +17,11 @@ namespace HerghysStudio.Survivor
 
         [Header("Time Slider")]
         [SerializeField] GameTimerUI timerUI;
+
+        [Header("Panels")]
+        [SerializeField] GameObject winPanel;
+        [SerializeField] GameObject losePanel;
+        [SerializeField] GameObject pausePanel;
 
         /// <summary>
         /// Update Coin
@@ -45,5 +51,10 @@ namespace HerghysStudio.Survivor
         /// <param name="text"></param>
         public void UpdateTimer (float fillValue, string text) 
             => timerUI.UpdateTime(fillValue, text);
+
+        internal void PauseGame(bool isPaused)
+        {
+            pausePanel.SetActive(isPaused);
+        }
     }
 }

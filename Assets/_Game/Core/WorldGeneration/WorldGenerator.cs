@@ -137,7 +137,7 @@ namespace HerghysStudio.Survivor.WorldGeneration
             // Identify chunks that are too far away
             foreach (var chunk in activeChunks)
             {
-                if (Vector2Int.Distance(chunk.Key, playerChunk) > RenderDistance + 1) // Buffer zone of 1 chunk
+                if (Vector2Int.Distance(chunk.Key, playerChunk) > 150) // Buffer zone of 1 chunk
                 {
                     chunksToRemove.Add(chunk.Key);
                 }

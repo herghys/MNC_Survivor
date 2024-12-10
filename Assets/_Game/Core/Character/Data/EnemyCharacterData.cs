@@ -1,5 +1,7 @@
 using HerghysStudio.Survivor.Character;
 
+using PlasticGui.WorkspaceWindow.Locks;
+
 using UnityEngine;
 
 namespace HerghysStudio.Survivor.Character
@@ -13,5 +15,7 @@ namespace HerghysStudio.Survivor.Character
         /// </summary>
         public EnemyController Prefab;
 
+        [Header("NavMesh")]
+        public float StoppingDistance = 5;
     }
 }

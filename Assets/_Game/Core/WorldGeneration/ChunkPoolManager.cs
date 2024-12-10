@@ -58,7 +58,7 @@ namespace HerghysStudio.Survivor.WorldGeneration
         }
 
         /// <summary>
-        /// _pool Total
+        /// enemyPools Total
         /// </summary>
         /// <returns></returns>
         public int PoolIdsCount()
@@ -67,7 +67,7 @@ namespace HerghysStudio.Survivor.WorldGeneration
         }
 
         /// <summary>
-        /// Get _pool Ids
+        /// Get enemyPools Ids
         /// </summary>
         /// <returns></returns>
         public string[] GetPoolsId()

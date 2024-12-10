@@ -5,12 +5,12 @@ using UnityEngine.Pool;
 namespace HerghysStudio.Survivor.Character
 {
     [RequireComponent(typeof(NavMeshAgent), typeof(EnemyMovement))]
-    public class EnemyController : BaseCharacterController<EnemyMovement, EnemyCharacterData>
+    public class EnemyController : BaseCharacterController<EnemyMovement, EnemyCharacterData, EnemyAttack>
     {
         /// <summary>
         /// Nav Mesh Agent
         /// </summary>
-        [SerializeField] NavMeshAgent navMeshAgent;
+        [SerializeField] internal NavMeshAgent navMeshAgent;
 
         /// <summary>
         /// Player as Target
@@ -23,11 +23,17 @@ namespace HerghysStudio.Survivor.Character
         [SerializeField] private GameObject goldDrop;
 
         /// <summary>
+        /// Enemy Pool
+        /// </summary>
+        public IObjectPool<EnemyController> PoolReference;
+
+        /// <summary>
         /// Do on Awake
         /// </summary>
         protected override void DoOnAwake()
         {
-            navMeshAgent = GetComponent<NavMeshAgent>();
+            IsDead = false;
+            navMeshAgent ??= GetComponent<NavMeshAgent>();
             base.DoOnAwake();
         }
 
@@ -38,9 +44,13 @@ namespace HerghysStudio.Survivor.Character
         public void SetupTargetReference(Transform player)
         {
             target = player;
-        }
 
-        public IObjectPool<EnemyController> PoolReference;
+            //navMeshAgent.enabled = false;
+            navMeshAgent.speed = CharacterData.BaseStatsData.Speed.Value;
+            navMeshAgent.stoppingDistance = CharacterData.StoppingDistance;
+            //navMeshAgent.enabled = true;
+            characterMovement.Setup(navMeshAgent, target);
+        }
 
         /// <summary>
         /// On Character Die
@@ -48,15 +58,16 @@ namespace HerghysStudio.Survivor.Character
         protected override void OnDie()
         {
             //base.OnDie();
+            IsDead = true;
             Instantiate(goldDrop, transform.position, Quaternion.identity);
-            PoolReference.Release(this);
+            Despawn();
         }
 
         /// <summary>
         /// On Get Hit
         /// </summary>
         /// <param name="damage"></param>
-        protected override void OnHit(float damage)
+        public override void OnHit(float damage)
         {
             base.OnHit(damage);
         }
@@ -67,36 +78,10 @@ namespace HerghysStudio.Survivor.Character
         }
 
         #region NavMesh
-        /// <summary>
-        /// Assigns a new target for the enemy.
-        /// </summary>
-        public void AssignTarget(Transform newTarget)
+        public void Despawn()
         {
-            target = newTarget;
+            PoolReference.Release(this);
         }
-
-        /// <summary>
-        /// Stops the NavMeshAgent and disables its movement.
-        /// </summary>
-        public void StopMovement()
-        {
-            if (navMeshAgent.enabled)
-            {
-                navMeshAgent.isStopped = true;
-            }
-        }
-
-        /// <summary>
-        /// Resumes the NavMeshAgent movement.
-        /// </summary>
-        public void ResumeMovement()
-        {
-            if (navMeshAgent.enabled)
-            {
-                navMeshAgent.isStopped = false;
-            }
-        }
-
         #endregion
         protected override void Reset()
         {
