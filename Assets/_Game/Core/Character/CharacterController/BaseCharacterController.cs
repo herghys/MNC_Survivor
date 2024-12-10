@@ -82,6 +82,7 @@ namespace HerghysStudio.Survivor.Character
         public virtual void OnHit(float damage)
         {
             characterAttribute.HealthAttributes.Value -= damage;
+            characterHealth.UpdateHealth(characterAttribute.HealthAttributes.Value / characterAttribute.HealthAttributes.MaxValue, characterAttribute.HealthAttributes.Value);
         }
 
         /// <summary>

@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 1129e40c4bb98d04a8cc90b024594009
+guid: cea3c765ff59f6a458744e6a7f720355
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1003695325810134894
-    second: Slider Background_0
+      213: -5177388603050735206
+    second: 9-Sliced
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -48,11 +48,11 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 2
   spriteExtrude: 1
-  spriteMeshType: 1
+  spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 256
+  spriteBorder: {x: 64, y: 64, z: 64, w: 64}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
@@ -68,7 +68,7 @@ TextureImporter:
   ignorePngGamma: 0
   applyGammaDecoding: 0
   swizzle: 50462976
-  cookieLightType: 0
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -139,30 +139,70 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Slider Background_0
+      name: 9-Sliced
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 512
-        height: 40
+        width: 256
+        height: 256
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 256, y: 0, z: 256, w: 0}
+      border: {x: 64, y: 64, z: 64, w: 64}
       outline: []
-      physicsShape: []
-      tessellationDetail: -1
+      physicsShape:
+      - - {x: 126, y: 73}
+        - {x: 120, y: 92}
+        - {x: 108, y: 108}
+        - {x: 92, y: 120}
+        - {x: 73, y: 126}
+        - {x: -73, y: 126}
+        - {x: -92, y: 120}
+        - {x: -108, y: 108}
+        - {x: -120, y: 92}
+        - {x: -126, y: 73}
+        - {x: -126, y: -73}
+        - {x: -120, y: -92}
+        - {x: -108, y: -108}
+        - {x: -92, y: -120}
+        - {x: -73, y: -126}
+        - {x: 73, y: -126}
+        - {x: 92, y: -120}
+        - {x: 108, y: -108}
+        - {x: 120, y: -92}
+        - {x: 126, y: -73}
+      tessellationDetail: 0.2
       bones: []
-      spriteID: 290fd524b682212f0800000000000000
-      internalID: -1003695325810134894
+      spriteID: a99410b1f783628b0800000000000000
+      internalID: -5177388603050735206
       vertices: []
       indices: 
       edges: []
       weights: []
     outline: []
-    physicsShape: []
+    physicsShape:
+    - - {x: 126, y: 73}
+      - {x: 120, y: 92}
+      - {x: 108, y: 108}
+      - {x: 92, y: 120}
+      - {x: 73, y: 126}
+      - {x: -73, y: 126}
+      - {x: -92, y: 120}
+      - {x: -108, y: 108}
+      - {x: -120, y: 92}
+      - {x: -126, y: 73}
+      - {x: -126, y: -73}
+      - {x: -120, y: -92}
+      - {x: -108, y: -108}
+      - {x: -92, y: -120}
+      - {x: -73, y: -126}
+      - {x: 73, y: -126}
+      - {x: 92, y: -120}
+      - {x: 108, y: -108}
+      - {x: 120, y: -92}
+      - {x: 126, y: -73}
     bones: []
-    spriteID: ea3bedb158fbc0646983d1f81c6340d4
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -170,7 +210,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Slider Background_0: -1003695325810134894
+      9-Sliced: -5177388603050735206
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

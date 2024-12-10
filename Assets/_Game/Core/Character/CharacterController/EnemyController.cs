@@ -30,6 +30,11 @@ namespace HerghysStudio.Survivor.Character
         [SerializeField] private GameObject goldDrop;
 
         /// <summary>
+        /// Face Camera
+        /// </summary>
+        [SerializeField] private FaceCamera faceCamera;
+
+        /// <summary>
         /// Enemy Pool
         /// </summary>
         public IObjectPool<EnemyController> PoolReference;
@@ -42,6 +47,8 @@ namespace HerghysStudio.Survivor.Character
             IsDead = false;
             navMeshAgent ??= GetComponent<NavMeshAgent>();
             base.DoOnAwake();
+            if (faceCamera != null)
+                faceCamera.Camera = GameManager.Instance.MainCamera;
             GameManager.Instance.OnClickedHome += OnClickedHome;
         }
 

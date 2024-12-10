@@ -27,6 +27,7 @@ namespace HerghysStudio.Survivor
         [SerializeField] private CameraController cameraController;
         [SerializeField] private PlayerSpawner playerSpawner;
         [SerializeField] private EnemySpawner enemySpawner;
+        [field: SerializeField] public Camera MainCamera { get; private set; }
         public PlayerController Player { get; private set; }
 
         public UnityAction OnPlayerDead;

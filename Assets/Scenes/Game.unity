@@ -1328,6 +1328,7 @@ MonoBehaviour:
   cameraController: {fileID: 1107471070}
   playerSpawner: {fileID: 1925125778}
   enemySpawner: {fileID: 808252922}
+  <MainCamera>k__BackingField: {fileID: 330585549}
 --- !u!114 &664052017
 MonoBehaviour:
   m_ObjectHideFlags: 0

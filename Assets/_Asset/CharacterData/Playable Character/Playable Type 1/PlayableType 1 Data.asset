@@ -16,4 +16,4 @@ MonoBehaviour:
   SpawnPosition: {x: 0, y: 0, z: 0}
   BaseStatsData: {fileID: 11400000, guid: d0b4231e4db22604b89a6c4f62e39c48, type: 2}
   BasicAttack: {fileID: 11400000, guid: 967419b086170d544bc87e911a165f0b, type: 2}
-  Prefab: {fileID: 8238395616978588787, guid: a5ad120b3d5f8ef4d985a709b8744f65, type: 3}
+  Prefab: {fileID: 1363632902343778982, guid: 04004c7d9891eb54982b68a2a429dd73, type: 3}

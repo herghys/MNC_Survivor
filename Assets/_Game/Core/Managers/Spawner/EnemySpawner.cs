@@ -162,7 +162,7 @@ namespace HerghysStudio.Survivor.Spawner
             float randomAngle = Random.Range(0f, Mathf.PI * 2);
             float randomDistance = Random.Range(minDistance, maxDistance);
 
-            if (transform != null || isAboutToGoHome)
+            if ( isAboutToGoHome)
                 return Vector3.zero;
 
             return player.position + new Vector3(
