@@ -15,7 +15,7 @@ namespace HerghysStudio.Survivor.Spawner
         [field: SerializeField] public PlayerController Player { get; private set; }
 
         /// <summary>
-        /// Setup Playable Character Data to be used
+        /// SetupPlayerReference Playable Character Data to be used
         /// </summary>
         /// <param name="_characterData"></param>
         public void SetupPlayerData(PlayableCharacterData _characterData)

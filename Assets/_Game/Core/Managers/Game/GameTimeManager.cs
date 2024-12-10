@@ -15,6 +15,7 @@ namespace HerghysStudio.Survivor
         public int TotalGameMinutes = 3;
         public float elapsedMillisecond = 0f;
         public float lastMinuteMilliseondCheckTime = 0f;
+        public long totalMilliSecond { get; private set; }
 
         public GameManager GameManager;
 
@@ -28,6 +29,7 @@ namespace HerghysStudio.Survivor
 
         public void StartGameTimer()
         {
+            totalMilliSecond = TimeSpan.FromMinutes(TotalGameMinutes).Milliseconds;
             elapsedMillisecond = 0;
             StartGameCountdown().Run();
         }
@@ -42,12 +44,11 @@ namespace HerghysStudio.Survivor
             }
 
             GameManager.OnStartCountdownEnded();
-            var totalMillisecond = TimeSpan.FromMinutes(TotalGameMinutes).Milliseconds;
 
-            TimerLoop(totalMillisecond).Run();
+            TimerLoop(totalMilliSecond).Run();
         }
 
-        private IEnumerator TimerLoop(int totalMillisecond)
+        private IEnumerator TimerLoop(long totalMillisecond)
         {
             while (elapsedMillisecond < totalMillisecond)
             {

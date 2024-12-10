@@ -55,7 +55,7 @@ namespace HerghysStudio.Survivor.Inputs
 
         #region Setup
         /// <summary>
-        /// Setup Inputs
+        /// SetupPlayerReference Inputs
         /// </summary>
         private void SetupInputs()
         {

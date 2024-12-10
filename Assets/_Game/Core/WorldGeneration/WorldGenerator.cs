@@ -10,7 +10,7 @@ namespace HerghysStudio.Survivor.WorldGeneration
 {
     public class WorldGenerator : NonPersistentSingleton<WorldGenerator>
     {
-        private GameObject EnvironmentHolder;
+        private ChunkHolder EnvironmentHolder;
         private bool isGenerating = false;
         private Vector3 lastPlayerPosition;
         private float chunkMoveThreshold = 12.1f;
@@ -27,12 +27,12 @@ namespace HerghysStudio.Survivor.WorldGeneration
         public override void DoOnAwake()
         {
             base.DoOnAwake();
-            if (ChunkPoolManager == null)
-                ChunkPoolManager = FindFirstObjectByType<ChunkPoolManager>();
+            ChunkPoolManager ??= FindFirstObjectByType<ChunkPoolManager>();
+
 
             if (EnvironmentHolder == null)
             {
-                EnvironmentHolder = new GameObject("Chunk_Holder");
+                EnvironmentHolder = Instantiate(ChunkPoolManager.chunkHolderPrefab);
                 EnvironmentHolder.transform.SetParent(null);
                 EnvironmentHolder.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
             }
@@ -54,7 +54,6 @@ namespace HerghysStudio.Survivor.WorldGeneration
             await ChunkPoolManager.InitializePools();
 
             GenerateInitialChunks();
-            RenderDistance += 1;
         }
 
         void Update()
@@ -104,6 +103,8 @@ namespace HerghysStudio.Survivor.WorldGeneration
 
             // Unload distant chunks
             await UnloadDistantChunks(playerChunk);
+
+            EnvironmentHolder?.RebakeNavMesh();
 
             isGenerating = false;
         }
@@ -198,6 +199,8 @@ namespace HerghysStudio.Survivor.WorldGeneration
             }
 
             Debug.Log("Initial chunks generated around (0, 0).");
+
+            EnvironmentHolder?.RebakeNavMesh();
         }
         void GenerateChunk(Vector2Int coord, int? forcedIndex = null)
         {

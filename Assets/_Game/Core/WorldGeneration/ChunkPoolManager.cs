@@ -9,6 +9,8 @@ namespace HerghysStudio.Survivor.WorldGeneration
 {
     public class ChunkPoolManager : MonoBehaviour
     {
+        public ChunkHolder chunkHolderPrefab;
+
         public ChunkData[] ChunkPrefabs; // Prefabs to create pools for
         public bool DebugMode = false; // Enable to log pool usage details
 
@@ -56,7 +58,7 @@ namespace HerghysStudio.Survivor.WorldGeneration
         }
 
         /// <summary>
-        /// Pool Total
+        /// _pool Total
         /// </summary>
         /// <returns></returns>
         public int PoolIdsCount()
@@ -65,7 +67,7 @@ namespace HerghysStudio.Survivor.WorldGeneration
         }
 
         /// <summary>
-        /// Get Pool Ids
+        /// Get _pool Ids
         /// </summary>
         /// <returns></returns>
         public string[] GetPoolsId()

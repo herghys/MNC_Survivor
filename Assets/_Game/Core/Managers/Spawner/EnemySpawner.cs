@@ -1,50 +1,96 @@
 using System.Collections;
 using System.Collections.Generic;
 
+using Codice.Client.BaseCommands.BranchExplorer;
+
 using HerghysStudio.Survivor.Character;
+using HerghysStudio.Survivor.Spawner;
 
 using UnityEngine;
 using UnityEngine.Pool;
 
-namespace HerghysStudio.Survivor
+namespace HerghysStudio.Survivor.Spawner
 {
     public class EnemySpawner : MonoBehaviour
     {
+        [Header("Holder")]
+        [SerializeField] private Transform enemiesHolder;
+        [SerializeField] private EnemyPoolManager poolPrefab;
+
         [Header("Enemy Settings")]
-        public List<EnemyCharacterData> enemyCharacterData; // List of character data
-        public Transform player; // Reference to the player
-        public Transform[] spawnPoints; // Spawn points for enemies
-        public float despawnDistance = 50f; // Distance to despawn enemies
+        public List<EnemyCharacterData> enemyCharacterData;
+        public Transform player;
+        public float despawnDistance = 80f;
 
         [Header("Spawn Configuration")]
-        public int enemiesPerMinute = 1000; // Enemies to spawn every minute
-        public float gameDuration = 180f; // Total game duration in seconds
+        [SerializeField] private int enemiesPerMinute = 1000;
+        [SerializeField] private float gameDuration = 180f;
+        [SerializeField] private float spawnCooldown;
 
-        private Dictionary<string, ObjectPool<EnemyController>> enemyPools; // Pools for each type of enemy
-        private List<EnemyController> activeEnemies = new List<EnemyController>(); // Track active enemies
-        private float spawnCooldown;
+        private Dictionary<string, EnemyPoolManager> enemyPools;
+        private List<EnemyController> activeEnemies = new();
 
-        public void Setup(Transform player)
+        private void Awake()
+        {
+            // Initialize cooldown (in seconds) for spawning enemies based on enemiesPerMinute
+            spawnCooldown = 60f / enemiesPerMinute;
+        }
+
+        /// <summary>
+        /// SetupPlayerReference the spawner with a player reference.
+        /// </summary>
+        public void SetupPlayerReference(Transform player)
         {
             this.player = player;
         }
 
+        /// <summary>
+        /// SetupPlayerReference the spawner with enemy character data.
+        /// </summary>
         public void Setup(List<EnemyCharacterData> enemyData)
         {
+            var holder = new GameObject("Enemies Holder");
+            enemiesHolder = holder.GetComponent<Transform>();
+            enemiesHolder.parent = null;
+
             enemyCharacterData = enemyData;
-            enemyPools = new Dictionary<string, ObjectPool<EnemyController>>();
+
+            enemyPools = new();
 
             foreach (var characterData in enemyCharacterData)
             {
-                enemyPools[characterData.CharacterName] = new ObjectPool<EnemyController>(
-                    createFunc: () => Instantiate(characterData.Prefab),
-                    actionOnGet: enemy => ActivateEnemy(enemy, characterData),
-                    actionOnRelease: DeactivateEnemy,
-                    actionOnDestroy: DestroyEnemy,
-                    collectionCheck: false,
-                    defaultCapacity: 100
-                );
+                EnemyPoolManager pool = default;
+                if (!enemyPools.ContainsKey(characterData.CharacterName))
+                {
+                    pool = Instantiate(poolPrefab, transform);
+                    enemyPools.Add(characterData.CharacterName, pool);
+                }
+
+                pool.SetupContext(this);
+
+                pool.SetupData(
+                    data: characterData,
+                    holder: enemiesHolder
+                    );
             }
+        }
+
+        public void ActivatePool()
+        {
+            Debug.Log("Activate Pool");
+            foreach (var pool in enemyPools.Values)
+            {
+                pool.SetupTarget(this.player);
+                pool.ActivatePool();
+            }
+        }
+
+        /// <summary>
+        /// Start spawning enemies over the game duration.
+        /// </summary>
+        public void StartSpawning()
+        {
+            StartCoroutine(SpawnEnemies());
         }
 
         /// <summary>
@@ -54,76 +100,63 @@ namespace HerghysStudio.Survivor
         {
             float elapsedTime = 0f;
 
-            while (elapsedTime < gameDuration)
+            while (elapsedTime < GameTimeManager.Instance.elapsedMillisecond)
             {
-                for (int i = 0; i < enemiesPerMinute; i++)
-                {
-                    SpawnEnemy();
-                    yield return new WaitForSeconds(spawnCooldown);
-                }
-
-                elapsedTime += 60f;
+                SpawnEnemy();
+                elapsedTime += spawnCooldown;
+                yield return new WaitForSeconds(spawnCooldown);
             }
 
             Debug.Log("Spawning complete!");
         }
 
         /// <summary>
-        /// Spawns a single enemy at a random spawn point.
+        /// Spawns a single enemy at a random position within a certain range of the player.
         /// </summary>
         private void SpawnEnemy()
         {
+            if (player == null) return;
+
             // Get a random character data
             var characterData = enemyCharacterData[Random.Range(0, enemyCharacterData.Count)];
 
-            // Get a random spawn point
-            Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
+            // Get a random position within range
+            Vector3 spawnPosition = GetRandomPositionAroundPlayer(10f, 50f);
 
-            // Get an enemy from the pool
-            EnemyController enemy = enemyPools[characterData.CharacterName].Get();
+            // Fetch an enemy from the pool
+            var poolManager = enemyPools[characterData.CharacterName];
+            EnemyController enemy = poolManager._pool.Get();
 
-            // Set enemy position with offset
-            enemy.transform.position = spawnPoint.position + characterData.SpawnPosition;
-            enemy.transform.rotation = spawnPoint.rotation;
+            // Set the enemy's position
+            enemy.transform.position = spawnPosition + characterData.SpawnPosition;
+            enemy.transform.rotation = Quaternion.identity;
 
             activeEnemies.Add(enemy);
         }
 
         /// <summary>
-        /// Returns an enemy to the pool.
+        /// Gets a random position around the player within a specified range.
         /// </summary>
-        /// <param name="enemy">Enemy to return.</param>
-        private void ReturnEnemy(EnemyController enemy)
+        private Vector3 GetRandomPositionAroundPlayer(float minDistance, float maxDistance)
         {
-            activeEnemies.Remove(enemy);
-            enemyPools[enemy.CharacterData.CharacterName].Release(enemy);
+            // Generate a random angle and distance
+            float randomAngle = Random.Range(0f, Mathf.PI * 2);
+            float randomDistance = Random.Range(minDistance, maxDistance);
+
+            // Calculate offset in XZ plane
+            Vector3 randomOffset = new Vector3(
+                Mathf.Cos(randomAngle) * randomDistance,
+                0f,
+                Mathf.Sin(randomAngle) * randomDistance
+            );
+
+            return player.position + randomOffset;
         }
 
-        /// <summary>
-        /// Activates an enemy when fetched from the pool.
-        /// </summary>
-        private void ActivateEnemy(EnemyController enemy, EnemyCharacterData data)
+        internal EnemyController CreateEnemy(EnemyController enemyController, Transform holder)
         {
-            enemy.gameObject.SetActive(true);
-            enemy.SetupData( data); // Pass CharacterData for initialization
-            enemy.SetupPlayerReference(player);
-        }
-
-        /// <summary>
-        /// Deactivates an enemy when returned to the pool.
-        /// </summary>
-        private void DeactivateEnemy(EnemyController enemy)
-        {
-            enemy.ResetCharacter();
-            enemy.gameObject.SetActive(false);
-        }
-
-        /// <summary>
-        /// Destroys an enemy if needed.
-        /// </summary>
-        private void DestroyEnemy(EnemyController enemy)
-        {
-            Destroy(enemy.gameObject);
+            var enemy = Instantiate(enemyController, holder);
+            return enemy;
         }
     }
 }

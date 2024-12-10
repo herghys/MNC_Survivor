@@ -18,7 +18,7 @@ namespace HerghysStudio.Survivor
 
 
         [Header("References")]
-        [SerializeField] GameTimeManager TimerManager;
+        [SerializeField] private GameTimeManager timerManager;
         [SerializeField] private WorldGenerator worldGenerator;
         [SerializeField] private CameraController cameraController;
         [SerializeField] private PlayerSpawner playerSpawner;
@@ -33,7 +33,7 @@ namespace HerghysStudio.Survivor
             base.DoOnAwake();
             worldGenerator ??= FindFirstObjectByType<WorldGenerator>();
             cameraController ??= FindFirstObjectByType<CameraController>();
-            TimerManager ??= FindFirstObjectByType<GameTimeManager>();
+            timerManager ??= FindFirstObjectByType<GameTimeManager>();
             playerSpawner ??=FindFirstObjectByType<PlayerSpawner>();
             enemySpawner ??= FindFirstObjectByType<EnemySpawner>();
 
@@ -43,13 +43,13 @@ namespace HerghysStudio.Survivor
 
 
         // Start is called once before the first execution of Update after the MonoBehaviour is created
-        IEnumerator Start()
+        void Start()
         {
             Player = playerSpawner.SpawnPlayer();
             worldGenerator.SetPlayer(Player.transform);
             cameraController.SetupPlayer(Player.transform);
-            enemySpawner.Setup(Player.transform);
-            yield return null;
+            enemySpawner.SetupPlayerReference(Player.transform);
+            enemySpawner.ActivatePool();
         }
 
         public void OnStartCountdownEnded()
@@ -65,6 +65,13 @@ namespace HerghysStudio.Survivor
         public void OnPlayerDead()
         {
 
+        }
+
+        [ContextMenu("Start Game")]
+        public void StartGame()
+        {
+            timerManager.StartGameTimer();
+            enemySpawner.StartSpawning();
         }
     }
 }
