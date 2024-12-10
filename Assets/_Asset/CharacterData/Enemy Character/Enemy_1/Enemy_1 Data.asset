@@ -15,5 +15,6 @@ MonoBehaviour:
   CharacterName: Enemy_1
   SpawnPosition: {x: 0, y: 0, z: 0}
   BaseStatsData: {fileID: 11400000, guid: 744d12f7c5593d640b2f02d71e0b1e00, type: 2}
-  BasicAttack: {fileID: 0}
+  BasicAttack: {fileID: 11400000, guid: ce10c1db9ab392648b9029e5b017a4d1, type: 2}
   Prefab: {fileID: 6626209355821486613, guid: 19c71b2d8c8734a499ea3c91868faa21, type: 3}
+  StoppingDistance: 8

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8628257286888236942}
   - component: {fileID: 8427606062971568256}
   m_Layer: 0
-  m_Name: EnemyPool
+  m_Name: EnemyPoolManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -41,9 +41,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 3003152825117418188}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f4a34f27c2367049a788066b098ebc4, type: 3}
+  m_Script: {fileID: 11500000, guid: b2eb717ffa2b45a468db8f9accd26d7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  prefab: {fileID: 0}
   <Data>k__BackingField: {fileID: 0}
   <Holder>k__BackingField: {fileID: 0}
   <Target>k__BackingField: {fileID: 0}
