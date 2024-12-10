@@ -11,8 +11,10 @@ namespace HerghysStudio.Survivor.Character
         {
             rigidBody = GetComponent<Rigidbody>();
             attributeController = GetComponent<CharacterAttributesController>();
+            DoOnAwake();
         }
 
+        protected virtual void DoOnAwake() { }
         protected internal abstract void Move();
     }
 }

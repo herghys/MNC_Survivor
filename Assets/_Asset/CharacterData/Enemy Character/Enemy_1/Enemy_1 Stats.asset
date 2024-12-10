@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Health:
     <Id>k__BackingField: 0
-    _value: 0
+    _value: 55
     <MaxValue>k__BackingField: 0
   Attack:
     <Id>k__BackingField: 1

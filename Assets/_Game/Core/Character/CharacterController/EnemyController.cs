@@ -1,3 +1,10 @@
+using System;
+using System.Collections;
+
+using Codice.Client.BaseCommands.BranchExplorer;
+
+using HerghysStudio.Survivor.Collectable;
+
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Pool;
@@ -35,6 +42,19 @@ namespace HerghysStudio.Survivor.Character
             IsDead = false;
             navMeshAgent ??= GetComponent<NavMeshAgent>();
             base.DoOnAwake();
+            GameManager.Instance.OnClickedHome += OnClickedHome;
+        }
+
+        private void OnDisable()
+        {
+            GameManager.Instance.OnClickedHome -= OnClickedHome;
+
+        }
+
+        private void OnClickedHome()
+        {
+            characterMovement.enabled = false;
+            characterMovement.StopAllCoroutines();
         }
 
         /// <summary>
@@ -44,6 +64,7 @@ namespace HerghysStudio.Survivor.Character
         public void SetupTargetReference(Transform player)
         {
             target = player;
+            IsDead = false;
 
             //navMeshAgent.enabled = false;
             navMeshAgent.speed = CharacterData.BaseStatsData.Speed.Value;
@@ -59,7 +80,27 @@ namespace HerghysStudio.Survivor.Character
         {
             //base.OnDie();
             IsDead = true;
-            Instantiate(goldDrop, transform.position, Quaternion.identity);
+
+            StartCoroutine(DieCoroutine());
+            
+        }
+
+        IEnumerator DieCoroutine()
+        {
+            characterMovement.StopAllCoroutines();
+
+            yield return new WaitForSeconds(0.25f);
+
+            void SpawnDrop()
+            {
+                var gold = CollectableManager.Instance.GoldDropPool.Get();
+                gold.transform.position = new Vector3(transform.position.x, gold.transform.position.y, transform.position.z);
+                gold.Setup(CollectableManager.Instance.GoldDropPool);
+            }
+
+            SpawnDrop();
+
+            GameManager.Instance.KilledEnemies++;
             Despawn();
         }
 
@@ -70,6 +111,8 @@ namespace HerghysStudio.Survivor.Character
         public override void OnHit(float damage)
         {
             base.OnHit(damage);
+            if (characterAttribute.HealthAttributes.Value <= 0)
+                OnDie();
         }
 
         public override void ResetCharacter()
@@ -80,6 +123,7 @@ namespace HerghysStudio.Survivor.Character
         #region NavMesh
         public void Despawn()
         {
+            navMeshAgent.enabled = false;
             PoolReference.Release(this);
         }
         #endregion
@@ -89,5 +133,15 @@ namespace HerghysStudio.Survivor.Character
             navMeshAgent ??= GetComponent<NavMeshAgent>();
             characterMovement ??=  GetComponent<EnemyMovement>();
         }
+
+#if UNITY_EDITOR
+        public float damageSample = 90;
+
+        [ContextMenu("Give Damage")]
+        public void GiveDamage()
+        {
+            OnHit(damageSample);
+        }
+#endif
     }
 }

@@ -43,14 +43,12 @@ GameObject:
   - component: {fileID: 3316636989589638830}
   - component: {fileID: 8363058314501511792}
   - component: {fileID: 5859759695610852575}
-  - component: {fileID: 2226780949291772431}
   - component: {fileID: 4102793093371935852}
   - component: {fileID: 6626209355821486613}
   - component: {fileID: 1761784493248822374}
   - component: {fileID: 5379084291054144194}
   - component: {fileID: 4246162896209614765}
   - component: {fileID: 8446672000152693875}
-  - component: {fileID: 452716378244318442}
   - component: {fileID: 8070680835440440490}
   - component: {fileID: 3470654753243556610}
   m_Layer: 9
@@ -149,33 +147,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &2226780949291772431
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8339546294431516978}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 84
-  m_CollisionDetection: 0
 --- !u!195 &4102793093371935852
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -219,6 +190,7 @@ MonoBehaviour:
   navMeshAgent: {fileID: 4102793093371935852}
   target: {fileID: 0}
   goldDrop: {fileID: 0}
+  damageSample: 90
 --- !u!114 &1761784493248822374
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -235,6 +207,7 @@ MonoBehaviour:
   attributeController: {fileID: 0}
   navMeshAgent: {fileID: 0}
   target: {fileID: 0}
+  controller: {fileID: 0}
 --- !u!114 &5379084291054144194
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -288,20 +261,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e64da6af8800874bae532a1c7691a2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &452716378244318442
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8339546294431516978}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9416694f296fa3546836090e48ad3239, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lodGroup: {fileID: 8070680835440440490}
-  rb: {fileID: 2226780949291772431}
 --- !u!205 &8070680835440440490
 LODGroup:
   m_ObjectHideFlags: 0

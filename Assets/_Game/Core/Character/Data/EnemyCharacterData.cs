@@ -1,7 +1,3 @@
-using HerghysStudio.Survivor.Character;
-
-using PlasticGui.WorkspaceWindow.Locks;
-
 using UnityEngine;
 
 namespace HerghysStudio.Survivor.Character

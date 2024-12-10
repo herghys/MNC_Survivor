@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using HerghysStudio.Survivor.Character;
+using HerghysStudio.Survivor.Utility.Coroutines;
 
 using UnityEngine;
 using UnityEngine.Pool;
@@ -24,10 +26,15 @@ namespace HerghysStudio.Survivor.Spawner
         private List<EnemyController> activeEnemies = new List<EnemyController>(); // Track active enemies
         [SerializeField] private float spawnCooldown;
 
+        [Range(1f, 20f)]
+        [SerializeField] private float batchSpawn = 1f;
+
+        bool isAboutToGoHome;
         bool IsPlayerDead;
 
         private void Awake()
         {
+            isAboutToGoHome = false;
             // Calculate cooldown between enemy spawns based on enemies per minute
             spawnCooldown = 60f / enemiesPerMinute;
         }
@@ -35,12 +42,20 @@ namespace HerghysStudio.Survivor.Spawner
         private void OnEnable()
         {
             GameManager.Instance.OnPlayerDead += OnPlayerDead;
+            GameManager.Instance.OnClickedHome += OnClickedHome;
         }
 
         private void OnDisable()
         {
             GameManager.Instance.OnPlayerDead -= OnPlayerDead;
+            GameManager.Instance.OnClickedHome -= OnClickedHome;
 
+        }
+
+        private void OnClickedHome()
+        {
+            isAboutToGoHome=true;
+            StopAllCoroutines();
         }
 
         private void OnPlayerDead()
@@ -95,35 +110,48 @@ namespace HerghysStudio.Survivor.Spawner
                 if (IsPlayerDead)
                     break;
 
+                if (player == null)
+                    yield return new WaitUntil(() => player != null);
+
                 if (GameManager.Instance.IsPaused)
                 {
                     yield return new WaitUntil(() => GameManager.Instance.IsPaused == false);
                 }
 
-                SpawnEnemy();
-                yield return new WaitForSeconds(spawnCooldown / 1000f);
+                SpawnEnemy().Run();
+                yield return new WaitForSeconds(batchSpawn);
             }
         }
 
         /// <summary>
         /// Spawns a single enemy from the pool.
         /// </summary>
-        private void SpawnEnemy()
+        private IEnumerator SpawnEnemy()
         {
-            if (player == null) return;
+            if (player == null)
+                yield return new WaitUntil(() => player != null);
 
-            // Get a random character data
-            var characterData = enemyCharacterData[Random.Range(0, enemyCharacterData.Count)];
+            for (int i = 0; i < batchSpawn; i++)
+            {
+                var characterData = enemyCharacterData[Random.Range(0, enemyCharacterData.Count)];
 
-            // Fetch an enemy from the pool
-            EnemyController enemy = enemyPools[characterData.CharacterName].Get();
+                // Fetch an enemy from the pool
+                EnemyController enemy = enemyPools[characterData.CharacterName].Get();
 
-            // Position enemy at a random location around the player
-            Vector3 spawnPosition = GetRandomPositionAroundPlayer(20f, 100f);
-            enemy.transform.position = spawnPosition;
-            enemy.transform.rotation = Quaternion.identity;
+                // Position enemy at a random location around the player
+                if (isAboutToGoHome)
+                    break;
 
-            activeEnemies.Add(enemy);
+                Vector3 spawnPosition = GetRandomPositionAroundPlayer(20f, 100f);
+                enemy.transform.position = spawnPosition;
+                enemy.transform.rotation = Quaternion.identity;
+
+                activeEnemies.Add(enemy);
+
+                yield return new WaitForSeconds(0.5f);
+                // Get a random character data
+            }
+
         }
 
         /// <summary>
@@ -133,6 +161,9 @@ namespace HerghysStudio.Survivor.Spawner
         {
             float randomAngle = Random.Range(0f, Mathf.PI * 2);
             float randomDistance = Random.Range(minDistance, maxDistance);
+
+            if (transform != null || isAboutToGoHome)
+                return Vector3.zero;
 
             return player.position + new Vector3(
                 Mathf.Cos(randomAngle) * randomDistance,

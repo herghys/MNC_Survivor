@@ -2,6 +2,7 @@ using System.Collections;
 
 using HerghysStudio.Survivor.Character;
 using HerghysStudio.Survivor.Spawner;
+using HerghysStudio.Survivor.Utility.Coroutines;
 using HerghysStudio.Survivor.Utility.Singletons;
 using HerghysStudio.Survivor.WorldGeneration;
 
@@ -29,14 +30,23 @@ namespace HerghysStudio.Survivor
         public PlayerController Player { get; private set; }
 
         public UnityAction OnPlayerDead;
-        public int ActiveEnemies { get; set; }
+        public UnityAction<bool> OnTogglePause;
+        public UnityAction OnClickedHome;
+        public int ActiveEnemies { get;  set; }
         public int KilledEnemies { get; set; }
+        public long GoldCount { get;  set; }
 
+
+        public bool IsHomeClicked { get; set; }
         public bool IsPaused { get; set; }
         public bool IsPlayerDead { get; private set; }
 
         public override void DoOnAwake()
         {
+            IsHomeClicked = false;
+            IsPaused = false;
+            IsPlayerDead = false;
+
             base.DoOnAwake();
             worldGenerator ??= FindFirstObjectByType<WorldGenerator>();
             cameraController ??= FindFirstObjectByType<CameraController>();
@@ -63,8 +73,10 @@ namespace HerghysStudio.Survivor
 
         private void LateUpdate()
         {
-            uiManager.UpdateEnemyKilled(KilledEnemies);
+            uiManager.UpdateCoin(GoldCount);
             uiManager.UpdateEnemyActiveCounter(ActiveEnemies);
+            uiManager.UpdateEnemyKilled(KilledEnemies);
+
         }
 
         public void OnStartCountdownEnded()
@@ -77,11 +89,23 @@ namespace HerghysStudio.Survivor
         public void TogglePauseGame()
         {
             IsPaused = !IsPaused;
+            OnTogglePause?.Invoke(IsPaused);
             uiManager.PauseGame(IsPaused);
         }
 
         public void MainMenu()
         {
+            if (IsHomeClicked)
+                return;
+
+            OnClickedHome?.Invoke();
+            IEMainMenu().Run();
+        }
+
+        private IEnumerator IEMainMenu()
+        {
+            IsHomeClicked = true;
+            yield return new WaitForSeconds(0.25f);
             SceneManager.LoadScene("MainMenu");
         }
 
