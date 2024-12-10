@@ -34,6 +34,11 @@ namespace HerghysStudio.Survivor.Character
             }
         }
 
+        public virtual void OnReceiveHealth(float health)
+        {
+            characterAttribute.HealthAttributes.Value += health;
+        }
+
         public override void ResetCharacter()
         {
             throw new System.NotImplementedException();

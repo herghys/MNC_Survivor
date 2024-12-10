@@ -20,10 +20,15 @@ namespace HerghysStudio.Survivor
         [field:SerializeField] public DefenseAttributes DefenseAttributes { get; protected set; } = new();
         [field:SerializeField] public SpeedAttributes SpeedAttributes { get; protected set; } = new();
 
-        public void SetupAttribute<TCharacterData>(ref TCharacterData characterData) where TCharacterData : CharacterData
+        public void SetupAttribute<TCharacterData>(TCharacterData characterData, bool autoSetup = false) where TCharacterData : CharacterData
         {
             CharacterDataInstance = Instantiate(characterData.BaseStatsData);
+            if (autoSetup)
+                SetupAttribute();
+        }
 
+        public void SetupAttribute()
+        {
             _configurator.Add(CharacterDataInstance.Health.Id, health => health.Value = CharacterDataInstance.Health.Value);
 
             _configurator.Add(CharacterDataInstance.Attack.Id, damage => damage.Value = CharacterDataInstance.Attack.Value);
@@ -40,6 +45,16 @@ namespace HerghysStudio.Survivor
             SpeedAttributes.SetValueAsMax();
 
             _configurator.ClearConfig(ObjectId<AttributeType>.Any);
+        }
+
+        public void ResetAttributes()
+        {
+            _configurator = new();
+            HealthAttributes = new();
+            DamageAttributes = new();
+            DefenseAttributes = new();
+            SpeedAttributes = new();
+
         }
 
         private void OnDisable()

@@ -2922,6 +2922,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 1746617455099332662, guid: a9c59519e512a234ea324e962bfb9db2, type: 3}
+  health: {fileID: 1216154428932083691, guid: 541342efe6daf02468a607ec6fe91395, type: 3}
   holder: {fileID: 1478544909}
 --- !u!1 &1580090160
 GameObject:

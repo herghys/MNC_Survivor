@@ -67,7 +67,7 @@ namespace HerghysStudio.Survivor.Character
         public virtual void SetupData(TCharacterData characterData)
         {
             this.CharacterData = characterData;
-            characterAttribute.SetupAttribute(ref CharacterData);
+            characterAttribute.SetupAttribute(CharacterData, true);
         }
 
         /// <summary>

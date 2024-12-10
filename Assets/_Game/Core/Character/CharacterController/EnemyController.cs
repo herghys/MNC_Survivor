@@ -3,7 +3,7 @@ using System.Collections;
 
 using Codice.Client.BaseCommands.BranchExplorer;
 
-using HerghysStudio.Survivor.Collectable;
+using HerghysStudio.Survivor.Collectables;
 
 using UnityEngine;
 using UnityEngine.AI;
@@ -105,7 +105,19 @@ namespace HerghysStudio.Survivor.Character
                 gold.Setup(CollectableManager.Instance.GoldDropPool);
             }
 
+            void SpawnHealth()
+            {
+                int randomg = UnityEngine.Random.Range(0, 100);
+                if (randomg > 70)
+                {
+                    var health = CollectableManager.Instance.HealthDropPool.Get();
+                    health.transform.position = new Vector3(transform.position.x, health.transform.position.y, transform.position.z);
+                    health.Setup(CollectableManager.Instance.GoldDropPool);
+                }
+            }
+
             SpawnDrop();
+            SpawnHealth();
 
             GameManager.Instance.KilledEnemies++;
             Despawn();
@@ -124,7 +136,11 @@ namespace HerghysStudio.Survivor.Character
 
         public override void ResetCharacter()
         {
-            //throw new System.NotImplementedException();
+        }
+
+        public void SetupAttribute()
+        {
+            characterAttribute.SetupAttribute();
         }
 
         #region NavMesh

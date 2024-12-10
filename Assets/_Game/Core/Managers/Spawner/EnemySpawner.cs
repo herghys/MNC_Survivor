@@ -192,6 +192,7 @@ namespace HerghysStudio.Survivor.Spawner
             enemy.SetupData(data); // Pass character data for initialization
             enemy.SetupTargetReference(player);
             enemy.gameObject.SetActive(true);
+            enemy.SetupAttribute();
 
             // Notify GameManager about the new active enemy
             GameManager.Instance.ActiveEnemies++;
@@ -203,7 +204,6 @@ namespace HerghysStudio.Survivor.Spawner
         private void DeactivateEnemy(EnemyController enemy)
         {
             activeEnemies.Remove(enemy);
-            enemy.ResetCharacter();
             enemy.gameObject.SetActive(false);
 
             // Notify GameManager about active enemies
