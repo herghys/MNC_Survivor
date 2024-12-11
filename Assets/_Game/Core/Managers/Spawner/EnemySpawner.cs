@@ -4,13 +4,14 @@ using System.Threading.Tasks;
 
 using HerghysStudio.Survivor.Character;
 using HerghysStudio.Survivor.Utility.Coroutines;
+using HerghysStudio.Survivor.Utility.Singletons;
 
 using UnityEngine;
 using UnityEngine.Pool;
 
 namespace HerghysStudio.Survivor.Spawner
 {
-    public class EnemySpawner : MonoBehaviour
+    public class EnemySpawner : NonPersistentSingleton<EnemySpawner>
     {
         [Header("Enemy Settings")]
         public List<EnemyCharacterData> enemyCharacterData; // List of character data
@@ -23,7 +24,7 @@ namespace HerghysStudio.Survivor.Spawner
 
         [SerializeField] Transform holder;
         private Dictionary<string, ObjectPool<EnemyController>> enemyPools; // Pools for each type of enemy
-        private List<EnemyController> activeEnemies = new List<EnemyController>(); // Track active enemies
+        public List<EnemyController> ActiveEnemies { get; private set; } = new List<EnemyController>(); // Track active enemies
         [SerializeField] private float spawnCooldown;
 
         [Range(1f, 20f)]
@@ -147,7 +148,7 @@ namespace HerghysStudio.Survivor.Spawner
                 enemy.transform.position = spawnPosition;
                 enemy.transform.rotation = Quaternion.identity;
 
-                activeEnemies.Add(enemy);
+                ActiveEnemies.Add(enemy);
 
                 yield return new WaitForSeconds(0.5f);
                 // Get a random character data
@@ -158,7 +159,7 @@ namespace HerghysStudio.Survivor.Spawner
         /// <summary>
         /// Gets a random position around the player within a specified range.
         /// </summary>
-        private Vector3 GetRandomPositionAroundPlayer(float minDistance, float maxDistance)
+        public Vector3 GetRandomPositionAroundPlayer(float minDistance, float maxDistance)
         {
             float randomAngle = Random.Range(0f, Mathf.PI * 2);
             float randomDistance = Random.Range(minDistance, maxDistance);
@@ -204,7 +205,7 @@ namespace HerghysStudio.Survivor.Spawner
         /// </summary>
         private void DeactivateEnemy(EnemyController enemy)
         {
-            activeEnemies.Remove(enemy);
+            ActiveEnemies.Remove(enemy);
             enemy.gameObject.SetActive(false);
 
             // Notify GameManager about active enemies

@@ -10,11 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 879071d80394fb74b892a8caa0b64167, type: 3}
-  m_Name: Enemy_1 Data
+  m_Name: Enemy_2 Data
   m_EditorClassIdentifier: 
-  CharacterName: Enemy_1
+  CharacterName: Enemy_2
   SpawnPosition: {x: 0, y: 0, z: 0}
-  BaseStatsData: {fileID: 11400000, guid: 744d12f7c5593d640b2f02d71e0b1e00, type: 2}
-  BasicAttack: {fileID: 11400000, guid: ce10c1db9ab392648b9029e5b017a4d1, type: 2}
-  Prefab: {fileID: 6626209355821486613, guid: 19c71b2d8c8734a499ea3c91868faa21, type: 3}
-  StoppingDistance: 8
+  BaseStatsData: {fileID: 11400000, guid: d23f5a04d1cda3a4ebabe45d64cda101, type: 2}
+  BasicAttack: {fileID: 11400000, guid: 6c1e403f490c3574795e5d082cdd4b42, type: 2}
+  BasicAttackCount: 1
+  Prefab: {fileID: 6626209355821486613, guid: 3ef106788eba92d4b931a30182125236, type: 3}
+  StoppingDistance: 1

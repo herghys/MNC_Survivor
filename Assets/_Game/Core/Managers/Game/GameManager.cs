@@ -28,12 +28,16 @@ namespace HerghysStudio.Survivor
         [SerializeField] private PlayerSpawner playerSpawner;
         [SerializeField] private EnemySpawner enemySpawner;
         [field: SerializeField] public Camera MainCamera { get; private set; }
+        [field: SerializeField] public Transform VFXHolder { get; private set; }
+
+
         public PlayerController Player { get; private set; }
 
         public UnityAction OnTimerEnded;
         public UnityAction<bool> OnGameEnded;
         public UnityAction<bool> OnTogglePause;
         public UnityAction OnClickedHome;
+        public UnityAction OnGameStart;
         public int ActiveEnemies { get;  set; }
         public int KilledEnemies { get; set; }
         public long GoldCount { get;  set; }
@@ -83,6 +87,7 @@ namespace HerghysStudio.Survivor
 
         public void OnStartCountdownEnded()
         {
+            OnGameStart?.Invoke();
             timerManager.StartLoop();
             enemySpawner.StartSpawning();
 

@@ -10,8 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f71f024788b3e03468c8e590686d0f87, type: 3}
-  m_Name: Basic_Circle_1
+  m_Name: PlayableType 1 Basic Attack
   m_EditorClassIdentifier: 
+  IsHoming: 0
+  AttackTargetType: 1
   EffectType: 0
-  AttackVFXData: {fileID: 11400000, guid: bbf258e61a3d4b541b53233da47fda74, type: 2}
-  cooldown: 5
+  AttackVFXData: {fileID: 11400000, guid: fbfe356bce100ee4aa28124fa1cdd506, type: 2}
+  cooldown: 4
+  minRandomSpawnRange: 1
+  maxRandomSpawnRange: 11

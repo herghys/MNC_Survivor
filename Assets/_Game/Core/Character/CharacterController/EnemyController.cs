@@ -1,7 +1,4 @@
-using System;
 using System.Collections;
-
-using Codice.Client.BaseCommands.BranchExplorer;
 
 using HerghysStudio.Survivor.Collectables;
 
@@ -79,6 +76,20 @@ namespace HerghysStudio.Survivor.Character
             characterMovement.StopAllCoroutines();
         }
 
+        public override void SetupData(EnemyCharacterData characterData)
+        {
+            base.SetupData(characterData);
+            characterAttack.Setup(characterData.BasicAttack, characterData.BasicAttackCount);
+        }
+
+        /// <summary>
+        /// Add Skill
+        /// </summary>
+        /// <param name="skill"></param>
+        public void AddSkill(CharacterSkill skill)
+        {
+            SkillSet.Add(skill);
+        }
 
         /// <summary>
         /// SetupPlayerReference Target
@@ -103,6 +114,7 @@ namespace HerghysStudio.Survivor.Character
         {
             //base.OnDie();
             IsDead = true;
+            characterAttack.CharacterDied();
 
             StartCoroutine(DieCoroutine());
 
@@ -123,8 +135,8 @@ namespace HerghysStudio.Survivor.Character
 
             void SpawnHealth()
             {
-                int randomg = UnityEngine.Random.Range(0, 100);
-                if (randomg > 70)
+                int randomg = UnityEngine.Random.Range(0, 10);
+                if (randomg > 5)
                 {
                     var health = CollectableManager.Instance.HealthDropPool.Get();
                     health.transform.position = new Vector3(transform.position.x, health.transform.position.y, transform.position.z);
@@ -156,7 +168,8 @@ namespace HerghysStudio.Survivor.Character
 
         public void SetupAttribute()
         {
-            characterAttribute.SetupAttribute();
+            characterAttribute.SetupAttribute(); 
+            characterAttack.StartAttacking();
         }
 
         #region NavMesh

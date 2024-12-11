@@ -31,6 +31,8 @@ namespace HerghysStudio.Survivor.VFX
     {
         Hold,
         MoveToTarget,
-        SpawnDirectly
+        SpawnOnSelf,
+        SpawnDirectly,
+        SpawnDurectlyRandom
     }
 }

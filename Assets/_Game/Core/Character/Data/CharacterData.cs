@@ -25,5 +25,10 @@ namespace HerghysStudio.Survivor.Character
         /// Skill Data
         /// </summary>
         public BasicAttackSkill BasicAttack;
+
+        /// <summary>
+        /// Basic Attack Count
+        /// </summary>
+        public int BasicAttackCount = 1;
     }
 }

@@ -41,7 +41,7 @@ namespace HerghysStudio.Survivor.Character
         [SerializeField] protected TCharacterAttack characterAttack;
 
         public bool IsDead { get; protected set; }
-        public List<CharacterSkill> SkillSet { get; protected set; }
+        public List<CharacterSkill> SkillSet { get; protected set; } = new();
 
 
         protected virtual void Awake()
@@ -68,6 +68,7 @@ namespace HerghysStudio.Survivor.Character
         {
             this.CharacterData = characterData;
             characterAttribute.SetupAttribute(CharacterData, true);
+            characterHealth.UpdateHealth(characterAttribute.HealthAttributes.Value / characterAttribute.HealthAttributes.MaxValue, characterAttribute.HealthAttributes.Value);
         }
 
         /// <summary>

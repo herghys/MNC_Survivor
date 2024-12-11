@@ -10,19 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 39d00e5d3bc186943a5d8dff9d60e38f, type: 3}
-  m_Name: Sword Projectile 1
+  m_Name: Circle Meteor
   m_EditorClassIdentifier: 
+  Prefab: {fileID: -7591251798606112686, guid: d3de43c1132ab504bb5a22af377e5c8a, type: 3}
   LayerMask:
     serializedVersion: 2
-    m_Bits: 960
+    m_Bits: 1984
   Behaviours:
-  - VFXBehaviour: 0
+  - VFXBehaviour: 4
     IsHoming: 0
-    Delay: 0.5
-    ActiveTime: 15
-    Speed: 3
-  - VFXBehaviour: 1
-    IsHoming: 1
-    Delay: 0.5
-    ActiveTime: 15
-    Speed: 3
+    Delay: 0
+    ActiveTime: 3
+    Speed: 0

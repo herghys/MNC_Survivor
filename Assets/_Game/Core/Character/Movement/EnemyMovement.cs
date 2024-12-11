@@ -1,9 +1,6 @@
-using System;
 using System.Collections;
 
 using HerghysStudio.Survivor.Utility.Coroutines;
-
-using UnityEditor.Animations;
 
 using UnityEngine;
 using UnityEngine.AI;

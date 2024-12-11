@@ -43,6 +43,8 @@ namespace HerghysStudio.Survivor.Character
         {
             IsDead = false;
             base.SetupData(characterData);
+            AddSkill(characterData.BasicAttack);
+            characterAttack.Setup(characterData.BasicAttack, characterData.BasicAttackCount);
         }
 
         /// <summary>
@@ -51,6 +53,8 @@ namespace HerghysStudio.Survivor.Character
         /// <param name="skill"></param>
         public void AddSkill(CharacterSkill skill)
         {
+            if (skill == null)
+                return;
             SkillSet.Add(skill);
         }
 
@@ -60,6 +64,7 @@ namespace HerghysStudio.Survivor.Character
         protected override void OnDie()
         {
             IsDead = true;
+            characterAttack.CharacterDied();
             GameManager.Instance.PlayerDead();
         }
 
