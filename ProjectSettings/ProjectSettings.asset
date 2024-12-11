@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: Herghys Studio
-  productName: MNC_Survivor_2022
+  productName: MNC Survivor (ESI)
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -141,8 +141,7 @@ PlayerSettings:
   tvOSBundleVersion: 1.0
   bundleVersion: 1.0.2
   preloadedAssets:
-  - {fileID: 11400000, guid: 7aec670fe4f056a4ca36e79673b57bc7, type: 2}
-  - {fileID: -1505662404780889581, guid: f692bbb1eb9e0844b926707bc6c9899d, type: 2}
+  - {fileID: 0}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -163,7 +162,7 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Android: com.HerghysStudio.MNC_Survivor_2022
+    Android: com.HerghysStudio.MNCSurvivorESI
     Standalone: com.Herghys-Studio.MNC-Survivor-2022
   buildNumber:
     Standalone: 0

@@ -18,6 +18,7 @@ namespace HerghysStudio.Survivor
         public float totalMilliSecond;
 
         public GameManager GameManager;
+        public GameUIManager UIManager;
 
         public UnityEvent OnOneMinutePassed;
         public UnityEvent OnCountDownDone;
@@ -96,11 +97,22 @@ namespace HerghysStudio.Survivor
                     lastMinuteMillisecondCheckTime = elapsedMillisecond; // Update last minute check time
                 }
 
-                GameUIManager.Instance.UpdateTimer(elapsedMillisecond / totalMilliSecond, "Time");
+                GameUIManager.Instance.UpdateTimer(elapsedMillisecond / totalMilliSecond, FormatElapsedTime(elapsedMillisecond));
                 yield return null;
             }
 
             GameManager.OnTimerEnded?.Invoke();
+        }
+
+        public string FormatElapsedTime(float elapsedMilliseconds)
+        {
+            // Calculate minutes, seconds, and milliseconds
+            int minutes = Mathf.FloorToInt(elapsedMilliseconds / 60000); // 60000 milliseconds in 1 minute
+            int seconds = Mathf.FloorToInt((elapsedMilliseconds / 1000) % 60); // Get seconds from milliseconds
+            int milliseconds = Mathf.FloorToInt(elapsedMilliseconds % 1000); // Get remaining milliseconds
+
+            // Return the formatted string as MM:SS.MMM
+            return string.Format("{0:D2}:{1:D2}.{2:D3}", minutes, seconds, milliseconds);
         }
     }
 }
