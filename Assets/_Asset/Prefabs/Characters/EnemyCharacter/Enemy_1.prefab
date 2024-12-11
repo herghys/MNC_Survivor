@@ -191,7 +191,9 @@ MonoBehaviour:
   navMeshAgent: {fileID: 4102793093371935852}
   target: {fileID: 0}
   goldDrop: {fileID: 0}
-  faceCamera: {fileID: 7703260336186162525}
+  faceCameras:
+  - {fileID: 7703260336186162525}
+  - {fileID: 138111502977960366}
   damageSample: 90
 --- !u!114 &1761784493248822374
 MonoBehaviour:
@@ -308,7 +310,7 @@ PrefabInstance:
     - target: {fileID: -474805098575834984, guid: 541d3f2ddec24f944a779118d8d8bc55,
         type: 3}
       propertyPath: setText
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4275100724884685368, guid: 541d3f2ddec24f944a779118d8d8bc55,
         type: 3}
@@ -430,6 +432,11 @@ PrefabInstance:
       propertyPath: m_PresetInfoIsWorld
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8296245826731137270, guid: 541d3f2ddec24f944a779118d8d8bc55,
+        type: 3}
+      propertyPath: FlipX
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -439,6 +446,18 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 7703260336186162525}
   m_SourcePrefab: {fileID: 100100000, guid: 541d3f2ddec24f944a779118d8d8bc55, type: 3}
+--- !u!114 &138111502977960366 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8296245826731137270, guid: 541d3f2ddec24f944a779118d8d8bc55,
+    type: 3}
+  m_PrefabInstance: {fileID: 8271006064301166936}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cd652e5ad40fe748984d9284c7e903f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &838130736427041216 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: -474805098575834984, guid: 541d3f2ddec24f944a779118d8d8bc55,
@@ -476,3 +495,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Camera: {fileID: 0}
+  FlipX: 0
+  FlipY: 0
+  FlipZ: 0

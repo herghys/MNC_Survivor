@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 
 using HerghysStudio.Survivor.Collectables;
 
@@ -29,7 +30,7 @@ namespace HerghysStudio.Survivor.Character
         /// <summary>
         /// Face Camera
         /// </summary>
-        [SerializeField] private FaceCamera faceCamera;
+        [SerializeField] private List<FaceCamera> faceCameras = new();
 
         /// <summary>
         /// Enemy Pool
@@ -44,8 +45,12 @@ namespace HerghysStudio.Survivor.Character
             IsDead = false;
             navMeshAgent ??= GetComponent<NavMeshAgent>();
             base.DoOnAwake();
-            if (faceCamera != null)
+
+            foreach (var faceCamera in faceCameras)
+            {
+
                 faceCamera.Camera = GameManager.Instance.MainCamera;
+            }
         }
 
         private void OnEnable()
@@ -168,7 +173,7 @@ namespace HerghysStudio.Survivor.Character
 
         public void SetupAttribute()
         {
-            characterAttribute.SetupAttribute(); 
+            characterAttribute.SetupAttribute();
             characterAttack.StartAttacking();
         }
 
