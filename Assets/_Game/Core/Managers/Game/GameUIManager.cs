@@ -56,5 +56,15 @@ namespace HerghysStudio.Survivor
         {
             pausePanel.SetActive(isPaused);
         }
+
+        internal void LoseGame()
+        {
+            losePanel.SetActive(true);
+        }
+
+        internal void WinGame()
+        {
+            winPanel.SetActive(true);
+        }
     }
 }

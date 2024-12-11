@@ -30,7 +30,8 @@ namespace HerghysStudio.Survivor
         [field: SerializeField] public Camera MainCamera { get; private set; }
         public PlayerController Player { get; private set; }
 
-        public UnityAction OnPlayerDead;
+        public UnityAction OnTimerEnded;
+        public UnityAction<bool> OnGameEnded;
         public UnityAction<bool> OnTogglePause;
         public UnityAction OnClickedHome;
         public int ActiveEnemies { get;  set; }
@@ -110,15 +111,17 @@ namespace HerghysStudio.Survivor
             SceneManager.LoadScene("MainMenu");
         }
 
-        public void OnTimerEnded()
+        public void WinGame()
         {
-
+            OnGameEnded?.Invoke(false);
+            uiManager.LoseGame();
         }
 
         public void PlayerDead()
         {
+            OnGameEnded?.Invoke(true);
             IsPlayerDead = true;
-            OnPlayerDead?.Invoke();
+            uiManager.LoseGame();
         }
 
         [ContextMenu("Start Game")]

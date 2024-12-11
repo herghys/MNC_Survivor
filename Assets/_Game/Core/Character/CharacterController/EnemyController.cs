@@ -49,20 +49,36 @@ namespace HerghysStudio.Survivor.Character
             base.DoOnAwake();
             if (faceCamera != null)
                 faceCamera.Camera = GameManager.Instance.MainCamera;
-            GameManager.Instance.OnClickedHome += OnClickedHome;
         }
+
+        private void OnEnable()
+        {
+            GameManager.Instance.OnClickedHome += OnClickedHome;
+            GameManager.Instance.OnGameEnded += OnGameEnded;
+        }
+
 
         private void OnDisable()
         {
+            GameManager.Instance.OnGameEnded -= OnGameEnded;
             GameManager.Instance.OnClickedHome -= OnClickedHome;
 
         }
 
         private void OnClickedHome()
         {
-            characterMovement.enabled = false;
+            if (navMeshAgent.isOnNavMesh)
+                navMeshAgent.isStopped = true;
             characterMovement.StopAllCoroutines();
         }
+
+        private void OnGameEnded(bool arg0)
+        {
+            if (navMeshAgent.isOnNavMesh)
+                navMeshAgent.isStopped = true;
+            characterMovement.StopAllCoroutines();
+        }
+
 
         /// <summary>
         /// SetupPlayerReference Target
@@ -89,7 +105,7 @@ namespace HerghysStudio.Survivor.Character
             IsDead = true;
 
             StartCoroutine(DieCoroutine());
-            
+
         }
 
         IEnumerator DieCoroutine()
@@ -154,7 +170,7 @@ namespace HerghysStudio.Survivor.Character
         {
             base.Reset();
             navMeshAgent ??= GetComponent<NavMeshAgent>();
-            characterMovement ??=  GetComponent<EnemyMovement>();
+            characterMovement ??= GetComponent<EnemyMovement>();
         }
 
 #if UNITY_EDITOR

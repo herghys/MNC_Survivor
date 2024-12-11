@@ -10,13 +10,13 @@ namespace HerghysStudio.Survivor.Character
         [SerializeField] Transform character;
         private void FixedUpdate()
         {
+            if (GameManager.Instance.IsPlayerDead) return;
             Move();
         }
 
         protected internal override void Move()
         {
             moveDirection = new Vector3(InputManager.Instance.MoveInput.x, 0f, InputManager.Instance.MoveInput.y);
-            Debug.Log(moveDirection);
             if (moveDirection != Vector3.zero)
             {
                 Quaternion targetRotation = Quaternion.LookRotation(moveDirection);

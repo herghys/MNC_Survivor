@@ -41,26 +41,27 @@ namespace HerghysStudio.Survivor.Spawner
 
         private void OnEnable()
         {
-            GameManager.Instance.OnPlayerDead += OnPlayerDead;
+            GameManager.Instance.OnGameEnded += OnGameEnded;
             GameManager.Instance.OnClickedHome += OnClickedHome;
         }
 
         private void OnDisable()
         {
-            GameManager.Instance.OnPlayerDead -= OnPlayerDead;
+            GameManager.Instance.OnGameEnded -= OnGameEnded;
             GameManager.Instance.OnClickedHome -= OnClickedHome;
 
         }
 
         private void OnClickedHome()
         {
-            isAboutToGoHome=true;
             StopAllCoroutines();
+            isAboutToGoHome = true;
         }
 
-        private void OnPlayerDead()
+        private void OnGameEnded(bool lose)
         {
-            IsPlayerDead = true;
+            StopAllCoroutines();
+            IsPlayerDead = lose;
         }
 
         public void Setup(List<EnemyCharacterData> enemyData)
@@ -134,13 +135,13 @@ namespace HerghysStudio.Survivor.Spawner
             for (int i = 0; i < batchSpawn; i++)
             {
                 var characterData = enemyCharacterData[Random.Range(0, enemyCharacterData.Count)];
-
+                if (isAboutToGoHome || GameManager.Instance.IsPlayerDead)
+                    break;
                 // Fetch an enemy from the pool
                 EnemyController enemy = enemyPools[characterData.CharacterName].Get();
 
                 // Position enemy at a random location around the player
-                if (isAboutToGoHome)
-                    break;
+
 
                 Vector3 spawnPosition = GetRandomPositionAroundPlayer(20f, 100f);
                 enemy.transform.position = spawnPosition;
@@ -162,7 +163,7 @@ namespace HerghysStudio.Survivor.Spawner
             float randomAngle = Random.Range(0f, Mathf.PI * 2);
             float randomDistance = Random.Range(minDistance, maxDistance);
 
-            if ( isAboutToGoHome)
+            if (isAboutToGoHome)
                 return Vector3.zero;
 
             return player.position + new Vector3(

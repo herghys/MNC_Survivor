@@ -24,13 +24,34 @@ namespace HerghysStudio.Survivor.Character
         {
             controller ??= GetComponent<EnemyController>();
             base.DoOnAwake();
+        }
+
+        private void OnEnable()
+        {
             GameManager.Instance.OnTogglePause += OnTogglePause;
             GameManager.Instance.OnClickedHome += OnClickedHome;
+            GameManager.Instance.OnGameEnded += OnGameEnded;
+        }
+
+        private void OnDisable()
+        {
+            StopAllCoroutines();
+            GameManager.Instance.OnTogglePause -= OnTogglePause;
+            GameManager.Instance.OnClickedHome -= OnClickedHome;
+            GameManager.Instance.OnGameEnded -= OnGameEnded;
+        }
+
+        private void OnGameEnded(bool arg0)
+        {
+            if (navMeshAgent.isOnNavMesh)
+                navMeshAgent.isStopped = true;
+            StopAllCoroutines();
         }
 
         private void OnClickedHome()
         {
-            navMeshAgent.enabled = false;
+            if (navMeshAgent.isOnNavMesh)
+                navMeshAgent.isStopped = true;
             StopAllCoroutines();
         }
 
@@ -42,16 +63,10 @@ namespace HerghysStudio.Survivor.Character
             if (!gameObject.activeSelf)
                 return;
 
-            TryMove().Run();
+            MoveCoroutine.Run();
         }
 
-        private void OnDisable()
-        {
-            StopAllCoroutines();
-            GameManager.Instance.OnTogglePause -= OnTogglePause;
-            GameManager.Instance.OnClickedHome -= OnClickedHome;
 
-        }
 
         protected internal void Setup(NavMeshAgent agent, Transform target)
         {
@@ -87,7 +102,7 @@ namespace HerghysStudio.Survivor.Character
                 if (target == null)
                     continue;
 
-                if (controller.IsDead)
+                if (controller.IsDead || GameManager.Instance.IsPlayerDead)
                     break;
 
                 navMeshAgent.destination = target.position;
@@ -106,7 +121,7 @@ namespace HerghysStudio.Survivor.Character
                     }
                 }
 
-                if (isPaused || GameManager.Instance.IsPlayerDead)
+                if (isPaused)
                     continue;
 
                 yield return new WaitForSeconds(0.05f);

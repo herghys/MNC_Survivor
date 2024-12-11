@@ -32,20 +32,21 @@ namespace HerghysStudio.Survivor
 
         private void OnEnable()
         {
-            GameManager.OnPlayerDead += OnPlayerDead;
+            GameManager.OnGameEnded += OnGameEnded;
         }
 
       
 
         private void OnDisable()
         {
-            GameManager.OnPlayerDead -= OnPlayerDead;
+            GameManager.OnGameEnded -= OnGameEnded;
 
         }
 
-        private void OnPlayerDead()
+        private void OnGameEnded(bool lose)
         {
-            _isPlayerDead = true;
+            StopAllCoroutines();
+            _isPlayerDead = lose;
         }
 
         public void StartGameTimer()
@@ -99,7 +100,7 @@ namespace HerghysStudio.Survivor
                 yield return null;
             }
 
-            GameManager.OnTimerEnded();
+            GameManager.OnTimerEnded?.Invoke();
         }
     }
 }
