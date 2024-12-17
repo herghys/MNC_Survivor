@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 
 using HerghysStudio.Survivor.VFX;
@@ -18,16 +19,39 @@ namespace HerghysStudio.Survivor.Character
         protected Transform Target;
 
         protected bool IsDead = false;
-
+        protected bool GameEnded = false;
         private void Awake()
         {
             DoOnAwake();
         }
 
+        protected virtual void OnEnable()
+        {
+            GameManager.Instance.OnGameStart += OnGameStart;
+            GameManager.Instance.OnGameEnded += OnGameEnded;
+        }
+
+
+
+        protected virtual void OnDisable()
+        {
+            GameManager.Instance.OnGameStart -= OnGameStart;
+            GameManager.Instance.OnGameEnded -= OnGameEnded;
+        }
+
+
         protected virtual void DoOnAwake()
         {
             CharacterAttributesController = GetComponent<CharacterAttributesController>();
         }
+
+        protected virtual void OnGameEnded(EndGameState arg0)
+        {
+            GameEnded = true;
+            StopAllCoroutines();
+        }
+
+        protected abstract void OnGameStart();
 
         public void CharacterDied()
         {
@@ -43,6 +67,7 @@ namespace HerghysStudio.Survivor.Character
 
         public virtual void Setup(BasicAttackSkill skill, int spawnCount)
         {
+            GameEnded = false;
             BasicAttackSkill = skill;
             BasicAttackSpawnCount = spawnCount;
         }
@@ -52,6 +77,80 @@ namespace HerghysStudio.Survivor.Character
             Target = target;
         }
 
+        protected abstract void BasicAttackTarget(BasicAttackSkill skill);
+
+        public virtual IEnumerator IEBasicAttack(BasicAttackSkill skill)
+        {
+            while (!IsDead || !GameManager.Instance.IsPlayerDead)
+            {
+                if (skill.AttackTargetType == AttackTargetType.SpawnOnRandomPosition)
+                {
+                    yield return SpawnAttackOnRandomPosition(skill, BasicAttackSpawnCount);
+                }
+                if (skill.AttackTargetType == AttackTargetType.SpawnOnOpponentTarget)
+                {
+                    yield return SpawnAttackOnTarget(skill, BasicAttackSpawnCount);
+                }
+                if (skill.AttackTargetType == AttackTargetType.ProjectileToPosition)
+                {
+                    yield return ProjectileToPosition(skill, BasicAttackSpawnCount);
+                }
+                if (skill.AttackTargetType == AttackTargetType.HomingProjectile)
+                {
+                    yield return ProjectileHoming(skill, BasicAttackSpawnCount);
+                }
+                if (skill.AttackTargetType == AttackTargetType.SpawnOnSelf)
+                {
+                    yield return SpawnAttackOnSelf(skill, BasicAttackSpawnCount);
+                }
+
+                yield return new WaitForSeconds(skill.cooldown);
+            }
+        }
+
+        protected abstract IEnumerator ProjectileToPosition(CharacterSkill skill, int count);
+
+        protected abstract IEnumerator ProjectileHoming(CharacterSkill skill, int count);
+
+        protected virtual IEnumerator SpawnAttackOnSelf(CharacterSkill skill, int count)
+        {
+            yield return null;
+            for (int i = 0; i < count; i++)
+            {
+                if (IsDead || GameManager.Instance.IsPlayerDead || GameManager.Instance.IsGameEnded)
+                    break;
+
+                var attack = GetAttackVFX();
+
+                attack.Setup(skill, skill.AttackVFXData, transform, GetVFXOwner(), CharacterAttributesController.DamageAttributes.Value);
+                attack.SetupAsSpawned(true, false);
+                attack.SetupTarget(transform, transform.position, transform, GetVFXOwner());
+                attack.StartLogic();
+            }
+        }   
+
+        protected virtual IEnumerator SpawnAttackOnRandomPosition(CharacterSkill skill, int count)
+        {
+            yield return null;
+            for (int i = 0; i < count; i++)
+            {
+                if (IsDead || GameManager.Instance.IsPlayerDead || GameManager.Instance.IsGameEnded)
+                    break;
+
+                var randomPos = GetRandomPositionAround(transform, skill.maxRandomSpawnRange);
+                var attack = GetAttackVFX();
+
+                attack.Setup(skill, skill.AttackVFXData, transform, GetVFXOwner(), GetDamage());
+                attack.SetupAsSpawned(false, true);
+                attack.SetupTarget(transform, randomPos, transform, GetVFXOwner());
+                attack.StartLogic();
+            }
+        }
+
+        protected abstract IEnumerator SpawnAttackOnTarget(CharacterSkill skill, int count);
+
+
+        #region Misc
         protected Vector3 GetRandomPositionAround(Transform characterTransform, float radius)
         {
             // Generate a random point in a 2D circle
@@ -63,38 +162,11 @@ namespace HerghysStudio.Survivor.Character
             return randomPosition;
         }
 
-        protected abstract void BasicAttackTarget(BasicAttackSkill skill);
-
-        public virtual IEnumerator IEBasicAttack(BasicAttackSkill skill)
-        {
-            while (!IsDead || !GameManager.Instance.IsPlayerDead)
-            {
-                if (skill.AttackTargetType == AttackTargetType.RandomPosition)
-                {
-                    yield return AttackRandomPosition(skill);
-                }
-                if (skill.AttackTargetType == AttackTargetType.OnSelf)
-                {
-                    yield return AttackFromSelf(skill);
-                }
-                if (skill.AttackTargetType == AttackTargetType.Target)
-                {
-                    yield return AttackToTarget(skill);
-                }
-
-                yield return new WaitForSeconds(skill.cooldown);
-            }
-        }
-        protected abstract IEnumerator AttackRandomPosition(CharacterSkill skill);
-
-        protected abstract IEnumerator AttackFromSelf(CharacterSkill skill);
+        protected abstract float GetDamage();
 
         protected abstract VFXOwner GetVFXOwner();
 
-        protected abstract IEnumerator AttackToTarget(CharacterSkill skill);
-
-        protected abstract void AttackHomingTarget(CharacterSkill skill);
-
-        protected abstract void AttackNonHomingTarget(CharacterSkill skill);
+        protected abstract AttackVFX GetAttackVFX();
+        #endregion
     }
 }

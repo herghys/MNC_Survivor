@@ -8,23 +8,17 @@ namespace HerghysStudio.Survivor
 
     public class CharacterSkill : ScriptableObject
     {
-        public bool IsHoming;
         public AttackTargetType AttackTargetType;
         public SkillEffectType EffectType;
         //public SkillObjectEffect SkillObjectEffect = new();
         public AttackVFXData AttackVFXData;
+        public float ProjectileSpeed = 1;
         public float cooldown;
 
         [Range(1, 50)]
         public float minRandomSpawnRange;
         [Range(1, 50)]
         public float maxRandomSpawnRange;
-
-        //public GameObject SpawnObjectEffect(Transform position, Transform parent)
-        //{
-        //    var effect = Instantiate(SkillObjectEffect.EffectPrefab, position, parent);
-        //    return effect;
-        //}
     }
     
     public class SkillObjectEffect
@@ -42,9 +36,10 @@ namespace HerghysStudio.Survivor
 
     public enum AttackTargetType
     {
-        Target,
-        RandomPosition,
-        CharacterRotation,
-        OnSelf
+        HomingProjectile,
+        ProjectileToPosition,
+        SpawnOnRandomPosition,
+        SpawnOnOpponentTarget,
+        SpawnOnSelf
     }
 }

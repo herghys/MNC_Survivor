@@ -74,7 +74,7 @@ namespace HerghysStudio.Survivor.Character
             characterMovement.StopAllCoroutines();
         }
 
-        private void OnGameEnded(bool arg0)
+        private void OnGameEnded(EndGameState arg0)
         {
             if (navMeshAgent.isOnNavMesh)
                 navMeshAgent.isStopped = true;
@@ -162,6 +162,8 @@ namespace HerghysStudio.Survivor.Character
         /// <param name="damage"></param>
         public override void OnHit(float damage)
         {
+            Debug.Log($"Damage: {damage}");
+
             base.OnHit(damage);
             if (characterAttribute.HealthAttributes.Value <= 0)
                 OnDie();

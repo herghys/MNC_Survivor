@@ -12,13 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39d00e5d3bc186943a5d8dff9d60e38f, type: 3}
   m_Name: Circle AOE Red
   m_EditorClassIdentifier: 
-  Prefab: {fileID: 1919401434620161604, guid: e84ed3538f5035247abcd67c886f29d7, type: 3}
+  Prefab: {fileID: 6927391230499967989, guid: d3de43c1132ab504bb5a22af377e5c8a, type: 3}
   LayerMask:
     serializedVersion: 2
     m_Bits: 1984
-  Behaviours:
-  - VFXBehaviour: 2
-    IsHoming: 0
+  AttackBehaviour:
     Delay: 0
-    ActiveTime: 3
-    Speed: 0
+    ActiveTime: 5
+    Activate: 1

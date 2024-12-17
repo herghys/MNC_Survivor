@@ -28,7 +28,7 @@ namespace HerghysStudio.Survivor
         public override void DoOnAwake()
         {
             base.DoOnAwake();
-            GameManager??= FindFirstObjectByType<GameManager>();
+            GameManager ??= FindFirstObjectByType<GameManager>();
         }
 
         private void OnEnable()
@@ -36,7 +36,7 @@ namespace HerghysStudio.Survivor
             GameManager.OnGameEnded += OnGameEnded;
         }
 
-      
+
 
         private void OnDisable()
         {
@@ -44,10 +44,15 @@ namespace HerghysStudio.Survivor
 
         }
 
-        private void OnGameEnded(bool lose)
+        private void OnGameEnded(EndGameState arg)
         {
             StopAllCoroutines();
-            _isPlayerDead = lose;
+
+            if (arg == EndGameState.Lose)
+                _isPlayerDead = true;
+
+            else
+                _isPlayerDead= false;
         }
 
         public void StartGameTimer()

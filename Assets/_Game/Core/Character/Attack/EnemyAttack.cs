@@ -14,24 +14,6 @@ namespace HerghysStudio.Survivor.Character
 
         protected ObjectPool<AttackVFX> vfxPool;
 
-
-        private void OnEnable()
-        {
-            GameManager.Instance.OnGameEnded += OnGameEnded;
-        }
-
-
-
-        private void OnDisable()
-        {
-            GameManager.Instance.OnGameEnded -= OnGameEnded;
-
-        }
-        private void OnGameEnded(bool arg0)
-        {
-            StopAllCoroutines();
-        }
-
         protected override void DoOnAwake()
         {
             controller = GetComponent<EnemyController>();
@@ -74,10 +56,9 @@ namespace HerghysStudio.Survivor.Character
         /// <param name="vFX"></param>
         protected override void GetVFX(AttackVFX vFX)
         {
-            vFX.Pool = vfxPool;
-            vFX.transform.parent = transform;
-            vFX.transform.position = transform.position;
-            vFX.Target = Target;
+            vFX.SetupPool(vfxPool);
+            //vFX.Setup(vfx)
+            //vFX.SetupTarget(Target, transform, VFXOwner.Enemy);
             vFX.gameObject.SetActive(true);
         }
 
@@ -88,71 +69,55 @@ namespace HerghysStudio.Survivor.Character
         protected override AttackVFX CreateVFX()
         {
             var vfx = Instantiate(BasicAttackSkill.AttackVFXData.Prefab, transform);
-            vfx.Pool = vfxPool;
+            vfx.SetupPool(vfxPool);
             return vfx;
         }
         #endregion
 
-        protected override IEnumerator AttackToTarget(CharacterSkill skill)
+        protected override IEnumerator ProjectileToPosition(CharacterSkill skill, int count)
         {
             yield return null;
         }
 
-        protected override void AttackHomingTarget(CharacterSkill skill)
+        protected override IEnumerator ProjectileHoming(CharacterSkill skill, int count)
         {
-            throw new System.NotImplementedException();
+            yield return null;
         }
 
-        protected override void AttackNonHomingTarget(CharacterSkill skill)
+        protected override IEnumerator SpawnAttackOnTarget(CharacterSkill skill, int count)
         {
-            throw new System.NotImplementedException();
+            yield return null;
+            for (int i = 0; i < count; i++)
+            {
+                if (IsDead || GameManager.Instance.IsPlayerDead)
+                    break;
+
+                var attack = vfxPool.Get();
+
+                attack.Setup(skill, skill.AttackVFXData, transform, GetVFXOwner(), CharacterAttributesController.DamageAttributes.Value);
+                attack.SetupAsSpawned(false, false);
+            }
         }
 
+        
+
+        #region Misc
         protected override VFXOwner GetVFXOwner()
         {
             return VFXOwner.Enemy;
         }
 
-        protected override IEnumerator AttackRandomPosition(CharacterSkill skill)
+        protected override float GetDamage()
         {
-            for (int i = 0; i < BasicAttackSpawnCount; i++)
-            {
-                if (IsDead || GameManager.Instance.IsPlayerDead)
-                    break;
-
-                var randomPos = GetRandomPositionAround(transform, skill.maxRandomSpawnRange);
-                var vfx = vfxPool.Get();
-                if (vfx == null)
-                    yield break;
-
-                vfx.transform.position = new Vector3(randomPos.x, vfx.transform.position.y, randomPos.z);
-                vfx.Setup(skill.AttackVFXData, null, transform, GetVFXOwner(), CharacterAttributesController.DamageAttributes.Value);
-
-                vfx.transform.parent = GameManager.Instance.VFXHolder;
-
-                yield return null;
-            }
+            return CharacterAttributesController.DamageAttributes.Value;
         }
 
-        protected override IEnumerator AttackFromSelf(CharacterSkill skill)
+        protected override AttackVFX GetAttackVFX()
         {
-            for (int i = 0; i < BasicAttackSpawnCount; i++)
-            {
-                if (IsDead || GameManager.Instance.IsPlayerDead)
-                    break;
-
-                var vfx = vfxPool.Get();
-                vfx.transform.position = transform.position;
-
-                if (vfx == null)
-                    yield break;
-
-                vfx.transform.position = transform.position;
-                vfx.Setup(skill.AttackVFXData, null, transform, GetVFXOwner(), CharacterAttributesController.DamageAttributes.Value, true);
-
-                vfx.transform.parent = GameManager.Instance.VFXHolder;
-                yield return null;
-            }
+            return vfxPool.Get();
         }
+
+        protected override void OnGameStart() { }
+        #endregion
     }
 }

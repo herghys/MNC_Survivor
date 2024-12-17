@@ -9,21 +9,18 @@ namespace HerghysStudio.Survivor.VFX
     [Serializable]
     public class AttackVFXBehaviour
     {
-        public VfxBehaviour VFXBehaviour;
-        public bool IsHoming;
+        [Tooltip("Hold time on parent")]
         public float Delay;
         public float ActiveTime = 5f;
-        public float Speed = 1.5f;
+        public bool Activate;
 
         public AttackVFXBehaviour() { }
 
         public AttackVFXBehaviour(AttackVFXBehaviour b)
         {
-            VFXBehaviour = b.VFXBehaviour;
-            IsHoming = b.IsHoming;
             Delay = b.Delay;
             ActiveTime = b.ActiveTime;
-            Speed = b.Speed;
+            Activate = b.Activate;
         }
     }
 

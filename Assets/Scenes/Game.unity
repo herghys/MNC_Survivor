@@ -1345,6 +1345,7 @@ MonoBehaviour:
   m_DeselectOnBackgroundClick: 1
   m_PointerBehavior: 0
   m_CursorLockBehavior: 0
+  m_ScrollDeltaPerTick: 6
 --- !u!114 &453651246
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2174,7 +2175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 166138950dc7175438187caf9dbcf324, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TotalGameMinutes: 3
+  TotalGameMinutes: 1
   elapsedMillisecond: 0
   lastMinuteMillisecondCheckTime: 0
   totalMilliSecond: 0

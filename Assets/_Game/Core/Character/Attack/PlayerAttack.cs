@@ -1,5 +1,6 @@
 using System.Collections;
 
+using HerghysStudio.Survivor.Spawner;
 using HerghysStudio.Survivor.Utility.Coroutines;
 using HerghysStudio.Survivor.VFX;
 
@@ -20,24 +21,13 @@ namespace HerghysStudio.Survivor.Character
             base.DoOnAwake();
         }
 
-        private void OnEnable()
-        {
-            GameManager.Instance.OnGameStart += OnGameStart;
-        }
-
-        private void OnDisable()
-        {
-            GameManager.Instance.OnGameStart -= OnGameStart;
-
-        }
-
         public override void Setup(BasicAttackSkill skill, int attackCount)
         {
             base.Setup(skill, attackCount);
             vfxPool = new(CreateVFX, GetVFX, ReleaseVFX, DestroyVFX);
         }
 
-        private void OnGameStart()
+        protected override void OnGameStart()
         {
             BasicAttackTarget(BasicAttackSkill);
         }
@@ -52,41 +42,31 @@ namespace HerghysStudio.Survivor.Character
             IsDead = controller.IsDead;
         }
 
-        protected override IEnumerator AttackToTarget(CharacterSkill skill)
+        protected override IEnumerator ProjectileToPosition(CharacterSkill skill, int count)
         {
             yield return null;
         }
 
-        protected override void AttackHomingTarget(CharacterSkill skill)
+        protected override IEnumerator ProjectileHoming(CharacterSkill skill, int count)
         {
-            for (int i = 0; i < BasicAttackSpawnCount; i++)
-            {
-                if (IsDead || !GameManager.Instance.IsPlayerDead)
-                    break;
-                AttackVFX vfx = vfxPool.Get();
-
-                vfx.transform.position = transform.position;
-                //vfx.Setup(skill.AttackVFXData, EnemySpawner.Instance., VFXOwner.Player, CharacterAttributesController.DamageAttributes.Value);
-            }
+            yield return null;
         }
 
-        protected override void AttackNonHomingTarget(CharacterSkill skill)
+        protected override IEnumerator SpawnAttackOnTarget(CharacterSkill skill, int count)
         {
-            for (int i = 0; i < BasicAttackSpawnCount; i++)
+            yield return null;
+            for (int i = 0; i < count; i++)
             {
-                if (IsDead || !GameManager.Instance.IsPlayerDead)
+                if (IsDead || GameManager.Instance.IsPlayerDead)
                     break;
-                // Retrieve a projectile from the pool
-                AttackVFX vfx = vfxPool.Get();
 
-                // Set the starting position to the character's current position
-                vfx.transform.position = transform.position;
+                //EnemySpawner.Instance.GetRa
+                var attack = vfxPool.Get();
 
-                // Determine the forward direction
-                Vector3 forwardDirection = transform.forward;
-
-                // Setup the VFX with direction or target
-                vfx.Setup(skill.AttackVFXData, forwardDirection, transform, VFXOwner.Player, CharacterAttributesController.DamageAttributes.Value);
+                attack.Setup(skill, skill.AttackVFXData, transform, GetVFXOwner(), CharacterAttributesController.DamageAttributes.Value);
+                attack.SetupAsSpawned(false,false);
+                attack.SetupTarget(transform, transform.position, transform, GetVFXOwner());
+                attack.StartLogic();
             }
         }
 
@@ -103,60 +83,33 @@ namespace HerghysStudio.Survivor.Character
 
         protected override void GetVFX(AttackVFX vFX)
         {
-            vFX.Pool = vfxPool;
-            vFX.transform.parent = GameManager.Instance.VFXHolder;
-            vFX.Target = Target;
-            vFX.gameObject.SetActive(true);
+            vFX.SetupPool(vfxPool);
         }
 
         protected override AttackVFX CreateVFX()
         {
             var vfx = Instantiate(BasicAttackSkill.AttackVFXData.Prefab, GameManager.Instance.VFXHolder);
-            vfx.Pool = vfxPool;
+            vfx.gameObject.SetActive(false);
+            vfx.SetupPool(vfxPool);
             return vfx;
         }
         #endregion
 
+        #region Misc
         protected override VFXOwner GetVFXOwner()
         {
             return VFXOwner.Player;
         }
 
-        protected override IEnumerator AttackRandomPosition(CharacterSkill skill)
+        protected override float GetDamage()
         {
-            for (int i = 0; i < BasicAttackSpawnCount; i++)
-            {
-                if (IsDead || GameManager.Instance.IsPlayerDead)
-                    break;
-                var randomPos = GetRandomPositionAround(transform, skill.maxRandomSpawnRange);
-                var vfx = vfxPool.Get();
-
-                if (vfx == null)
-                    yield break;
-
-                vfx.transform.position = new Vector3(randomPos.x, vfx.transform.position.y, randomPos.z);
-                vfx.Setup(skill.AttackVFXData, null, transform, GetVFXOwner(), CharacterAttributesController.DamageAttributes.Value);
-
-                yield return null;
-            }
+            return CharacterAttributesController.DamageAttributes.Value;
         }
 
-        protected override IEnumerator AttackFromSelf(CharacterSkill skill)
+        protected override AttackVFX GetAttackVFX()
         {
-            for (int i = 0; i < BasicAttackSpawnCount; i++)
-            {
-                if (IsDead || GameManager.Instance.IsPlayerDead)
-                    break;
-                var vfx = vfxPool.Get();
-
-                if (vfx == null)
-                    yield break;
-
-                vfx.transform.position = transform.position;
-                vfx.Setup(skill.AttackVFXData, null, transform, GetVFXOwner(), CharacterAttributesController.DamageAttributes.Value, true);
-
-                yield return null;
-            }
+            return vfxPool.Get();
         }
+        #endregion
     }
 }

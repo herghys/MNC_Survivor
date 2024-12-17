@@ -29476,7 +29476,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_BoundingSphereOverride: {x: 1.02e-43, y: 4.6e-44, z: 6.44e-42, w: 0}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
@@ -34390,7 +34390,8 @@ GameObject:
   - component: {fileID: 8176230078092200170}
   - component: {fileID: 8636462576248347671}
   - component: {fileID: 3961134475654469786}
-  - component: {fileID: -7591251798606112686}
+  - component: {fileID: 8748960048665256606}
+  - component: {fileID: 6927391230499967989}
   m_Layer: 10
   m_Name: Meteors AOE
   m_TagString: Untagged
@@ -39317,7 +39318,34 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 5.225235, y: 2.9678698, z: 6.7799354}
   m_Center: {x: 0, y: 0.9839349, z: 0}
---- !u!114 &-7591251798606112686
+--- !u!54 &8748960048665256606
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7957833072274404953}
+  serializedVersion: 4
+  m_Mass: 0.0000001
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &6927391230499967989
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -39326,24 +39354,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 7957833072274404953}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7162093b427b95e4aacf5f40425039dc, type: 3}
+  m_Script: {fileID: 11500000, guid: e9d3abf7cf4c3024cbe86144e26d36e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LayerMask:
-    serializedVersion: 2
-    m_Bits: 960
-  Owner: 0
-  Behaviours: []
-  Target: {fileID: 0}
-  OwnerTransform: {fileID: 0}
-  TargetPos: {x: 0, y: 0, z: 0}
-  MoveDirection: {x: 0, y: 0, z: 0}
-  Data: {fileID: 0}
-  Rigidbody: {fileID: 0}
-  Damage: 0
-  DirectDamage: 0
-  DamagOnnStop: 1
-  DamageOnCollsion: 1
-  boxCollider: {fileID: 3961134475654469786}
+  collisionDivideByDuration: 1
+  _boxCollider: {fileID: 3961134475654469786}
+  rigidBody: {fileID: 8748960048665256606}
   particle: {fileID: 8176230078092200170}
-  elapsed: 0
+  Owner: 0
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 1984
+  skill: {fileID: 0}
+  data: {fileID: 0}
+  damage: 0
+  elapsedActiveTime: 0
+  isActivated: 0
+  <isHoming>k__BackingField: 0
+  <isSpawnOnRandomPosition>k__BackingField: 0
+  <isAttackFromOwner>k__BackingField: 0
+  UseParticleCollision: 1
+  DamageOnStop: 0

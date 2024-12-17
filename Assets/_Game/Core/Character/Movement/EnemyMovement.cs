@@ -38,7 +38,7 @@ namespace HerghysStudio.Survivor.Character
             GameManager.Instance.OnGameEnded -= OnGameEnded;
         }
 
-        private void OnGameEnded(bool arg0)
+        private void OnGameEnded(EndGameState arg0)
         {
             if (navMeshAgent.isOnNavMesh)
                 navMeshAgent.isStopped = true;

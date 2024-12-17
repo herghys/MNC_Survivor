@@ -34,7 +34,7 @@ namespace HerghysStudio.Survivor
         public PlayerController Player { get; private set; }
 
         public UnityAction OnTimerEnded;
-        public UnityAction<bool> OnGameEnded;
+        public UnityAction<EndGameState> OnGameEnded;
         public UnityAction<bool> OnTogglePause;
         public UnityAction OnClickedHome;
         public UnityAction OnGameStart;
@@ -46,6 +46,7 @@ namespace HerghysStudio.Survivor
         public bool IsHomeClicked { get; set; }
         public bool IsPaused { get; set; }
         public bool IsPlayerDead { get; private set; }
+        public bool IsGameEnded { get; private set; }
 
         public override void DoOnAwake()
         {
@@ -118,15 +119,21 @@ namespace HerghysStudio.Survivor
 
         public void WinGame()
         {
-            OnGameEnded?.Invoke(false);
-            uiManager.LoseGame();
+            EndGame(EndGameState.Win);
+            uiManager.WinGame();
         }
 
         public void PlayerDead()
         {
-            OnGameEnded?.Invoke(true);
+            EndGame(EndGameState.Lose);
             IsPlayerDead = true;
             uiManager.LoseGame();
+        }
+
+        private void EndGame(EndGameState state)
+        {
+            IsGameEnded = true;
+            OnGameEnded?.Invoke(state);
         }
 
         [ContextMenu("Start Game")]
@@ -134,5 +141,11 @@ namespace HerghysStudio.Survivor
         {
             timerManager.StartGameTimer();
         }
+    }
+
+    public enum EndGameState
+    {
+        Win,
+        Lose
     }
 }

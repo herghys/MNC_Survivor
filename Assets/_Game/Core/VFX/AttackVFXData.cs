@@ -9,6 +9,7 @@ namespace HerghysStudio.Survivor.VFX
     {
         public AttackVFX Prefab;
         public LayerMask LayerMask;
-        public List<AttackVFXBehaviour> Behaviours = new List<AttackVFXBehaviour>();
+        //public List<AttackVFXBehaviour> Behaviours = new List<AttackVFXBehaviour>();
+        public AttackVFXBehaviour AttackBehaviour;
     }
 }

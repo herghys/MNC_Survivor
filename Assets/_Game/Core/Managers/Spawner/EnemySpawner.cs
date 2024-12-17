@@ -33,9 +33,11 @@ namespace HerghysStudio.Survivor.Spawner
         bool isAboutToGoHome;
         bool IsPlayerDead;
 
-        private void Awake()
+        public override void DoOnAwake()
         {
+            base.DoOnAwake();
             isAboutToGoHome = false;
+
             // Calculate cooldown between enemy spawns based on enemies per minute
             spawnCooldown = 60f / enemiesPerMinute;
         }
@@ -59,10 +61,10 @@ namespace HerghysStudio.Survivor.Spawner
             isAboutToGoHome = true;
         }
 
-        private void OnGameEnded(bool lose)
+        private void OnGameEnded(EndGameState arg)
         {
             StopAllCoroutines();
-            IsPlayerDead = lose;
+            IsPlayerDead = arg == EndGameState.Lose;
         }
 
         public void Setup(List<EnemyCharacterData> enemyData)

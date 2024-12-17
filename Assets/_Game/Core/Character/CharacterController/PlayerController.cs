@@ -11,6 +11,10 @@ namespace HerghysStudio.Survivor.Character
         protected override void DoOnAwake()
         {
             base.DoOnAwake();
+        }
+
+        private void OnEnable()
+        {
             GameManager.Instance.OnTimerEnded += OnTimerEnded;
         }
 
@@ -25,7 +29,7 @@ namespace HerghysStudio.Survivor.Character
         /// <exception cref="NotImplementedException"></exception>
         private void OnTimerEnded()
         {
-            if (characterAttribute.HealthAttributes.Value > 0)
+            if (characterAttribute.HealthAttributes.Value > 1)
             {
                 GameManager.Instance.WinGame();
             }
